@@ -1,0 +1,42 @@
+{% extends 'base.html'%}
+
+{% block content%}
+    <h2>Algoritmo Apriori.</h2>
+    <p>Es un algoritmo que permite encontrar de forma eficiente "conjuntos de ítems frecuentes", los cuales sirven de base para generar reglas de asociación. </p>
+    <script rel="text/javascript" src="{{ url_for('static',filename='js/upload_files.js')}}"></script>
+    <form id="upload-file" method="POST" enctype="multipart/form-data">
+        <h6>Soporte mínimo</h6>
+        <div class="slidecontainer">
+            <span id="span_support">50</span>
+            <input type="range" min="0" max="100" value="50" class="slider" id="support">
+        </div>
+
+        <h6>Confianza mínima</h6>
+        <div class="slidecontainer">
+            <span id="span_confidence">50</span>
+            <input type="range" min="0" max="100" value="50" class="slider" id="confidence">
+        </div>
+        <h6>Elevación mínima</h6>
+        <div class="slidecontainer">
+            <span id="span_lift">5</span>
+            <input type="range" min="0" max="10" step="0.1" value="5" class="slider" id="lift">
+        </div>
+        <h6>Archivo .csv</h6>
+        <div class="file-upload-wrapper">
+            <fieldset>
+                <label for="file">Seleccione un archivo</label>
+                <input name="file" type="file" class="file-upload" >
+            </fieldset>
+        </div>
+        <fieldset>
+            <button id="upload-file-btn" type="button" class="btn btn-sm btn-primary">Procesar</button>
+        </fieldset>
+    </form>
+    <!--
+    <h6>Or arrastra el archivo</h6>
+    <div class="upload-drop-zone" id="drop-zone">
+        Arrastra el archivo aqui.
+    </div>
+    
+    -->
+{% endblock%}

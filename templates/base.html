@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Mineria De Datos</title>
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <!-- Our Custom CSS -->
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/upload.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/loader.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/items.css')}}">
+    <!-- Scripts -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+    <!-- Font Awesome JS -->
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+    <script rel="text/javascript" src="{{ url_for('static',filename='js/slider_js.js')}}"></script>
+</head>
+
+<body>
+    <div class="wrapper">
+        <!-- Sidebar  -->
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <h3>Data Mining Tools</h3>
+            </div>
+            <ul class="list-unstyled components">
+                <li>
+                    <a href="/"> <i class="fa fa-home" aria-hidden="true"></i> Inicio</a>
+                </li>
+                <li class="active">
+                    <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-code" aria-hidden="true"></i>Algoritmos</a>
+                    <ul class="collapse list-unstyled" id="homeSubmenu">
+                        <li>
+                            <a href="/apriori">A priori</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="/about"><i class="fa fa-paper-plane" aria-hidden="true"></i>Acerca De</a>
+                </li>
+        </nav>
+        <!-- Page Content  -->
+        <div id="content">
+            <div id="js-loader" style="display: none;">
+                <div class="block_page"></div>
+                <div class="loader"></div>
+            </div>
+            
+            {% block content%}
+
+            {% endblock%}
+
+        </div>
+    </div>
+</body>
+
+</html>
