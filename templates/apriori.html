@@ -8,7 +8,7 @@
         <h6>Soporte mínimo</h6>
         <div class="slidecontainer">
             <span id="span_support">50</span>
-            <input type="range" min="0" max="100" value="50" class="slider" id="support">
+            <input type="range" min="0" max="100" value="50.0" step="0.01" class="slider" id="support">
         </div>
 
         <h6>Confianza mínima</h6>
@@ -32,6 +32,11 @@
             <button id="upload-file-btn" type="button" class="btn btn-sm btn-primary">Procesar</button>
         </fieldset>
     </form>
+    <br>
+    <div id="rules_container">
+    </div>
+
+
     <!--
     <h6>Or arrastra el archivo</h6>
     <div class="upload-drop-zone" id="drop-zone">
