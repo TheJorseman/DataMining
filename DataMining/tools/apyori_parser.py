@@ -1,6 +1,7 @@
 
 
 ROUND_FLOAT = 2
+from DataMining.tools.table_html import TableHTML
 
 def parse_rule(rule):
   item = rule
@@ -42,9 +43,9 @@ def desc_to_html(data):
     rule = data["rule"]
     return """
     {ant} y {cons} normalmente se compran juntos. 
-    Dada la elevacion, hay {lift} mas probailidad de que 
+    Dada la elevacion, hay {lift} mas probabilidad de que 
     al comprar {ant} se compre {cons}.
-    """.format(ant=rule[0],cons=rule[1], lift=data["lift"])
+    """.format(ant=rule[0],cons=rule[1], lift=round(data["lift"],3))
 
 def rule_to_html(number,data):
     template = """

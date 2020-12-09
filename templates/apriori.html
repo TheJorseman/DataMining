@@ -1,26 +1,39 @@
-{% extends 'base.html'%}
-
-{% block content%}
+{% extends 'algorithm_base.html'%}
+{% block algorithm%}  
     <h2>Algoritmo Apriori.</h2>
     <p>Es un algoritmo que permite encontrar de forma eficiente "conjuntos de ítems frecuentes", los cuales sirven de base para generar reglas de asociación. </p>
-    <script rel="text/javascript" src="{{ url_for('static',filename='js/upload_files.js')}}"></script>
+    <div id="summary">
+        <h5>Resumen del archivo</h5>
+        <strong>Nombre del archivo: </strong> <span id="filename_summary"></span>
+        <br>
+        <strong>Número de Columnas: </strong> <span id="rows_summary"></span>
+        <h6>Columnas seleccionadas</h6>
+        <div id="table_summary">
+        </div>
+    </div>
     <form id="upload-file" method="POST" enctype="multipart/form-data">
         <h6>Soporte mínimo</h6>
         <div class="slidecontainer">
-            <span id="span_support">50</span>
+            <div class="col-xs-2">
+                <input type="text" class="form-control" id="support_input" value="50" placeholder="50" width="20" type="number"><span id="errmsgs" style="color: red;"></span>
+            </div>
             <input type="range" min="0" max="100" value="50.0" step="0.01" class="slider" id="support">
         </div>
-
         <h6>Confianza mínima</h6>
         <div class="slidecontainer">
-            <span id="span_confidence">50</span>
+            <div class="col-xs-2">
+                <input type="text" class="form-control" id="confidence_input" value="50" placeholder="50" width="20" type="number"><span id="errmsgc" style="color: red;"></span>
+            </div>
             <input type="range" min="0" max="100" value="50" class="slider" id="confidence">
         </div>
         <h6>Elevación mínima</h6>
         <div class="slidecontainer">
-            <span id="span_lift">5</span>
+            <div class="col-xs-2">
+                <input type="text" class="form-control" id="lift_input" value="5" placeholder="5" width="20" type="number"><span id="errmsgl" style="color: red;"></span>
+            </div>
             <input type="range" min="0" max="10" step="0.1" value="5" class="slider" id="lift">
         </div>
+        <!-- 
         <h6>Archivo .csv</h6>
         <div class="file-upload-wrapper">
             <fieldset>
@@ -28,12 +41,14 @@
                 <input name="file" type="file" class="file-upload" >
             </fieldset>
         </div>
+        -->
         <fieldset>
-            <button id="upload-file-btn" type="button" class="btn btn-sm btn-primary">Procesar</button>
+            <button id="upload-file-btn" type="button" class="btn btn-md btn-primary">Procesar</button>
         </fieldset>
     </form>
     <br>
     <div id="rules_container">
+    
     </div>
 
 

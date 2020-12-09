@@ -1,0 +1,83 @@
+{% extends 'base.html'%}
+
+{% block content%}
+<script rel="text/javascript" src="{{ url_for('static',filename='js/upload_files.js')}}"></script>
+<div id="base">
+    <form id="analize-file-form" method="POST" enctype="multipart/form-data">
+        <h5>Archivo</h5>
+        <div class="file-upload-wrapper">
+            <fieldset>
+                <label for="file">Seleccione un archivo</label>
+                <input name="file" type="file" class="file-upload" accept=".xls,.xlsx, .csv, .txt">
+            </fieldset>
+        </div>
+        <br>
+        <h5>Header</h5>
+        <div class="form-check">
+            <input type="checkbox" id="header" class="form-check-input" name="header" value="True" checked>
+            <label class="form-check-label" for="header">Incluir Header</label><br>
+        </div>
+        <br>
+        <div class="form-check">
+            <input type="checkbox" id="is_table" class="form-check-input" name="is_table" value="True" checked>
+            <label class="form-check-label" for="header"><span>Es una tabla (Desactivado si es una lista de listas)</span></label><br>
+        </div>
+        <br>
+        <fieldset>
+            <button id="analize-file-btn" type="button" class="btn btn-sm btn-primary">Analizar Tabla</button>
+        </fieldset>
+    </form>
+    <div id="features-container" style="display: none;">
+        <br>
+        <form id="config-data-form" method="POST" enctype="multipart/form-data"></form>
+            <div>
+                <div id="features">
+                    <h5>Seleccione las caracteristicas que desea incluir en el analisis</h5>
+                </div>
+                <br>
+                <h5>Datos de la tabla</h5>
+                <div id="head_table">
+                </div>
+                <br>
+                <div id="data-len">
+                    <h5>Seleccione el numero de registros a incluir en el analisis</h5>
+                    <span>Hay un total de </span> <span id="span_len">n</span> <span> registros</span>
+                    <div class="row">
+                        <div class="ml-3 col-xs-2">
+                            <input type="text" class="form-control" id="df_len" value="85" placeholder="85">
+                        </div>
+                    </div>
+                    <br>
+                    <div id="random-data">
+                        <div class="form-check">
+                            <input type="checkbox" id="random" class="form-check-input" name="random" value="False">
+                            <label class="form-check-label" for="header"><span>Elegir los datos de forma aleatoria</span></label><br>
+                        </div>
+                    </div>
+                </div>
+                <!-- 
+                <div id="others" class="d-none">
+                    <br>
+                    <h5>Otras Opciones</h5>
+                    <div class="form-check">
+                        <input type="checkbox" id="header" class="form-check-input" name="header" value="False">
+                        <label class="form-check-label" for="header"><span>Es una tabla (Desactivado si es una lista de listas)</span></label><br>
+                    </div>
+                </div>
+                -->
+                <br>
+                <fieldset>
+                    <button id="save-conf-btn" type="button" class="btn btn-sm btn-primary">Guardar Configuracion</button>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="algorithm" style="display: none;">
+    {% block algorithm%}
+    {% endblock%}
+</div>
+
+{% endblock%}
+
