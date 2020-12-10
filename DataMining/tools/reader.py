@@ -9,15 +9,16 @@ class Reader(object):
         self.extensions = ["csv", "txt", "xlsx"]
         self.header = header
         self.table = table
-        if table:
-            if ext.lower() == "csv":
-                self.df = read_csv(path,header=0 if header else None)
-            elif ext.lower() == "txt":
-                self.df = read_table(path,header=0 if header else None)
-            elif ext.lower() == "xlsx":
-                self.df = read_excel(path,header=0 if header else None)
-            else:
-                raise Warning("Solo se admiten las extensiones " + ",".join(self.extensions))
+        if ext.lower() == "csv":
+            self.df = read_csv(path,header=0 if header else None)
+        elif ext.lower() == "txt":
+            self.df = read_table(path,header=0 if header else None)
+        elif ext.lower() == "xlsx":
+            self.df = read_excel(path,header=0 if header else None)
+        else:
+            raise Warning("Solo se admiten las extensiones " + ",".join(self.extensions))
+
+
     def get_head(self):
         return self.df.head()
     

@@ -1,7 +1,8 @@
 {% extends 'base.html'%}
-
 {% block content%}
 <script rel="text/javascript" src="{{ url_for('static',filename='js/upload_files.js')}}"></script>
+{% block description%}
+{% endblock%}
 <div id="base">
     <form id="analize-file-form" method="POST" enctype="multipart/form-data">
         <h5>Archivo</h5>
@@ -75,6 +76,15 @@
 </div>
 
 <div id="algorithm" style="display: none;">
+    <div id="summary">
+        <h5>Resumen del archivo</h5>
+        <strong>Nombre del archivo: </strong> <span id="filename_summary"></span>
+        <br>
+        <strong>Número de Columnas: </strong> <span id="rows_summary"></span>
+        <h6><strong>Columnas seleccionadas:</strong></h6>
+        <div id="table_summary">
+        </div>
+    </div>
     {% block algorithm%}
     {% endblock%}
 </div>

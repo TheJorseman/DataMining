@@ -61,7 +61,9 @@ $(document).ready(function () {
         conf_form.append("random",$("#random")[0].value);
         columns.forEach(column => {
             var iid = "#" + column
-            conf_form.append(column,$(iid)[0].checked);
+            if ($(iid).length){
+                conf_form.append(column,$(iid)[0].checked);
+            }
         });
         $.ajax({
             url: '/save_conf',
@@ -70,14 +72,16 @@ $(document).ready(function () {
             contentType: false,
             processData: false,
             success: function(response){
-                //console.log(response);
-                console.log(response);
                 $("#base").css("display","none");
                 $("#algorithm").css("display","block");
                 $("#filename_summary").text(response["filename"]);
                 $("#rows_summary").text(response["df_len"]);
                 $("#table_summary").html(response["sel_columns_html"]);
                 scrollToTop();
+                //Load inmeddiatly the correlation data
+                if ($("#correlation").length) { 
+                    correlation();
+                }
             },
             error: function(error){
                 $("#js-loader").css("display","none");
@@ -89,4 +93,28 @@ $(document).ready(function () {
     function scrollToTop() { 
         window.scrollTo(0, 0); 
     }; 
+
+
+
+    function correlation(){
+        $("#js-loader").css("display","block");
+        $.ajax({
+            url: '/correlation_process',
+            type: 'POST',
+            contentType: false,
+            processData: false,
+            success: function(response){
+                //console.log(response);
+                $("#pearson_correlation_matrix").html(response["correlation_matrix_html"]);
+                $("#heatmap").html(response["heatmap_html"]);
+                $("#var_abscisa").html(response["options"]);
+                $("#var_neat").html(response["options"]);
+                $("#js-loader").css("display","none");
+            },
+            error: function(error){
+                //$("#js-loader").css("display","none");
+                console.log(error);
+            }
+        });     
+    };
 });

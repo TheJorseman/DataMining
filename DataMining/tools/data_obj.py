@@ -1,6 +1,7 @@
 from DataMining.tools.reader import Reader
 from DataMining.tools.table_html import TableHTML
 from sklearn.utils import shuffle
+from DataMining.tools.html_tools import HTML_tools
 from io import StringIO
 
 class Data(object):
@@ -28,7 +29,8 @@ class Data(object):
             return ""
 
     def set_columns(self,columns):
-        self.df = self.df.drop(columns,axis=1)
+        if self.table:
+            self.df = self.df.drop(columns,axis=1)
 
     def set_rows(self,n_rows,n_shuffle=False):
         self.df = self.df.head(n_rows)
@@ -38,7 +40,7 @@ class Data(object):
     def get_summary(self):
         summary = {}
         current_columns = list(self.df.columns.values) 
-        columns_table = TableHTML(table_class="table-sm")
+        columns_table = TableHTML(table_class="table-sm table-bordered")
         columns_table.add_record(current_columns)
         summary["sel_columns_html"] = columns_table.get_html_table()
         summary["df_len"] = len(self.df.index)
@@ -72,3 +74,14 @@ class Data(object):
         else:
             self.apyori = self.get_apyori_data_numeric_bool()
         return self.apyori 
+
+
+    def get_options_html(self):
+        columns = list(self.df.columns.values) 
+        html_code = ""
+        for column in columns:
+            html_code += HTML_tools.option_html(column,column)
+        return html_code
+
+
+        

@@ -1,25 +1,20 @@
 {% extends 'algorithm_base.html'%}
+
+{% block description%}  
+<h2>Algoritmo Apriori.</h2>
+<p>Es un algoritmo que permite encontrar de forma eficiente "conjuntos de ítems frecuentes", los cuales sirven de base para generar reglas de asociación. </p>
+{% endblock%}
+
 {% block algorithm%}  
-    <h2>Algoritmo Apriori.</h2>
-    <p>Es un algoritmo que permite encontrar de forma eficiente "conjuntos de ítems frecuentes", los cuales sirven de base para generar reglas de asociación. </p>
-    <div id="summary">
-        <h5>Resumen del archivo</h5>
-        <strong>Nombre del archivo: </strong> <span id="filename_summary"></span>
-        <br>
-        <strong>Número de Columnas: </strong> <span id="rows_summary"></span>
-        <h6>Columnas seleccionadas</h6>
-        <div id="table_summary">
-        </div>
-    </div>
     <form id="upload-file" method="POST" enctype="multipart/form-data">
-        <h6>Soporte mínimo</h6>
+        <h6>Porcentaje Soporte mínimo</h6>
         <div class="slidecontainer">
             <div class="col-xs-2">
                 <input type="text" class="form-control" id="support_input" value="50" placeholder="50" width="20" type="number"><span id="errmsgs" style="color: red;"></span>
             </div>
             <input type="range" min="0" max="100" value="50.0" step="0.01" class="slider" id="support">
         </div>
-        <h6>Confianza mínima</h6>
+        <h6>Porcentaje Confianza mínima</h6>
         <div class="slidecontainer">
             <div class="col-xs-2">
                 <input type="text" class="form-control" id="confidence_input" value="50" placeholder="50" width="20" type="number"><span id="errmsgc" style="color: red;"></span>

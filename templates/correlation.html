@@ -1,0 +1,56 @@
+{% extends 'algorithm_base.html'%}
+
+{% block description%}  
+<h2>Correlación de Pearson</h2>
+<p>Descripción del algoritmo.</p>
+{% endblock%}
+
+{% block algorithm%}
+    <script rel="text/javascript" src="{{ url_for('static',filename='js/plot.js')}}"></script>
+    <br>
+    <div id="correlation">
+        <h5>Matriz de correlaciones</h5>
+        <div id="pearson_correlation_matrix">
+        </div>
+        <br>
+        <h5>Heatmap de la matriz.</h5>
+        <div id="heatmap">
+        </div>
+        <br>
+        <div>
+            <h5>Graficar correlacion.</h5>
+            <div class="row">
+                <div class="col-3">
+                    <label for="var_abscisa">Variable para la Abscisa</label>
+                    <select id="var_abscisa" class="form-control" name="var_abscisa">
+                        <option value="test">VAR 1</option>
+                    </select>
+                </div>
+                <div class="col-3">
+                    <label for="var_neat">Variable para la Ordenada</label>
+                    <select id="var_neat" class="form-control" name="var_neat">
+                        <option value="test">VAR 1</option>
+                    </select>
+                </div>
+            </div>
+            <br>
+            <button id="plot_vars" type="button" class="btn btn-sm btn-primary">Graficar</button>
+            <br>
+            <br>
+            <br>
+            <div id="graph_container">
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <!--
+    <h6>Or arrastra el archivo</h6>
+    <div class="upload-drop-zone" id="drop-zone">
+        Arrastra el archivo aqui.
+    </div>
+    
+    -->
+{% endblock%}

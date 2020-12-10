@@ -141,6 +141,16 @@ a.article:hover {
     color: #fff !important;
 }
 
+
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color:#1295d1;
+    color: #1295d1;
+    text-align: center;
+ }
 /* ---------------------------------------------------
     CONTENT STYLE
 ----------------------------------------------------- */

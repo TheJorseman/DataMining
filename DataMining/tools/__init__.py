@@ -3,3 +3,4 @@ from . import apyori_parser
 from . import reader
 from . import table_html
 from . import data_obj
+from . import html_tools

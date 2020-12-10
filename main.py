@@ -1,16 +1,26 @@
 from DataMining.tools.data_table_parser import CSV_reader
 from flask import Flask, render_template, request, jsonify
 import pandas as pd
-from io import StringIO
+from io import StringIO, BytesIO
+from base64 import b64encode
 from DataMining.tools.data_table_parser import CSV_reader
 from DataMining.tools.apyori_parser import rules_to_html
 from DataMining.tools.reader import Reader
 from DataMining.tools.data_obj import Data
 from DataMining.tools.table_html import TableHTML
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
 
 app = Flask("Data Mining")
 app.config["DATA_UPLOAD"] = "/uploads"
 data_config = {}
+
+def get_image_b64(b64encoded):
+    image = """
+        <img src="data:image/png;base64,{b64}"/>
+    """
+    return image.format(b64=b64encoded.decode("utf-8"))
 
 @app.route("/apriori_process", methods=["POST"])
 def apriori_process():
@@ -24,6 +34,23 @@ def apriori_process():
         rules = list(rules)
         #min_rules = 10 if len(rules)> 10 else len(list(rules))
         response["html"] = TableHTML(table_class="table table-hover").apriori_table(rules)
+    return jsonify(response)
+
+@app.route("/correlation_process", methods=["POST"])
+def correlation_process():
+    response = {}
+    if "DATA" in data_config:
+        matrix_correlation = data_config["DATA"].df.corr(method='pearson')
+        response["correlation_matrix_html"] = matrix_correlation.to_html().replace("dataframe","table")
+        import seaborn as sb 
+        pic_IObytes = BytesIO()
+        figure = sb.heatmap(matrix_correlation, annot = True).get_figure()
+        figure.savefig(pic_IObytes,format='png')
+        pic_IObytes.seek(0)
+        pic_hash = b64encode(pic_IObytes.read())
+        response["heatmap_html"] = get_image_b64(pic_hash)
+        plt.close()
+        response["options"] = data_config["DATA"].get_options_html()
     return jsonify(response)
 
 @app.route("/analize_data", methods=["POST"])
@@ -56,6 +83,25 @@ def save_conf():
     data_config["DATA"].set_columns([k for k,v in form.items() if v == "false"])
     return jsonify(data_config["DATA"].get_summary())
 
+@app.route("/plot_graph", methods=["POST"])
+def plot_graph():
+    global data_config
+    response = {}
+    abcisa = request.form["abcisa"]
+    ordenada = request.form["ordenada"]
+    df = data_config["DATA"].df
+    pic_IObytes = BytesIO()
+    figure = plt.figure()
+    plt.plot(df[abcisa],df[ordenada], 'bo')
+    plt.ylabel(abcisa)
+    plt.xlabel(ordenada)
+    figure.savefig(pic_IObytes,format='png')
+    pic_IObytes.seek(0)
+    pic_hash = b64encode(pic_IObytes.read())
+    response["plot"] = get_image_b64(pic_hash)
+    plt.close()
+    return jsonify(response)
+
 @app.route("/apriori")
 def apriori():
     #summary = data_config["DATA"].get_summary()
@@ -63,7 +109,7 @@ def apriori():
 
 @app.route("/correlaciones")
 def correlaciones():
-    return render_template("algorithm_base.html")
+    return render_template("correlation.html")
 
 @app.route("/about")
 def about():
