@@ -1,16 +1,17 @@
 {% extends 'base.html'%}
 {% block content%}
 <script rel="text/javascript" src="{{ url_for('static',filename='js/upload_files.js')}}"></script>
+<script rel="text/javascript" src="{{ url_for('static',filename='js/common.js')}}"></script>
 {% block description%}
 {% endblock%}
 <div id="base">
     <form id="analize-file-form" method="POST" enctype="multipart/form-data">
         <h5>Archivo</h5>
-        <div class="file-upload-wrapper">
-            <fieldset>
-                <label for="file">Seleccione un archivo</label>
-                <input name="file" type="file" class="file-upload" accept=".xls,.xlsx, .csv, .txt">
-            </fieldset>
+        <div class="row">
+            <div class="custom-file col-4 ml-2">
+                <input name="file" id="file" type="file" class="custom-file-input" lang="es" accept=".xls,.xlsx, .csv, .txt">
+                <label class="custom-file-label" for="file">Seleccionar Archivo</label>
+            </div>
         </div>
         <br>
         <h5>Header</h5>
@@ -70,11 +71,12 @@
                 <fieldset>
                     <button id="save-conf-btn" type="button" class="btn btn-sm btn-primary">Guardar Configuracion</button>
                 </fieldset>
+                <div name="separator" style="height: 300px;">
+                </div>
             </form>
         </div>
     </div>
 </div>
-
 <div id="algorithm" style="display: none;">
     <div id="summary">
         <h5>Resumen del archivo</h5>

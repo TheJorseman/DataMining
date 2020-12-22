@@ -28,7 +28,6 @@ class CSV_reader(object):
         self.n_columns = n_columns
         all_trans = self.get_matrix_from_df(bool)
         for t in range(n_rows):
-            print(t)
             transactions.append([str(columns[j]) if all_trans[t,j] else 'nan' for j in range(n_columns)])           
         return transactions
 
@@ -39,7 +38,6 @@ class CSV_reader(object):
         self.n_rows = n_rows
         self.n_columns = n_columns
         for t in range(n_rows):
-            print(t)
             transactions.append([str(self.df.values[t,j]) for j in range(n_columns)])
         return transactions
 

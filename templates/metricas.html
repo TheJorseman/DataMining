@@ -1,0 +1,58 @@
+{% extends 'algorithm_base.html'%}
+
+{% block description%}  
+<h2>Metricas</h2>
+<p>Descripción del algoritmo.</p>
+{% endblock%}
+
+{% block algorithm%}
+    <script rel="text/javascript" src="{{ url_for('static',filename='js/metrics.js')}}"></script>
+    <br>
+    <div id="metricas">
+        <h5>Seleccione la métrica</h5>
+        <div class="row">
+            <div class="col-4">
+                <label for="metric">Métrica</label>
+                <select id="metric" class="form-control" name="metric">
+                    <option value="euclidean">Euclidiana</option>
+                    <option value="chebyshev">Chebyshev</option>
+                    <option value="manhattan">Manhattan</option>
+                    <option value="minkowski">Minkowski</option>
+                </select>
+            </div>
+        </div>
+        <br>
+        <div id="minkowski_value" style="display: none;">
+            <h5>Seleccione el coeficiente de Minkowski</h5>
+            <div class="row">
+                <div class="col-4">
+                    <input class="form-control" id="minkowski_coef" value="2" placeholder="2" type="text"><span id="span_minkowski_coef" style="color: red;"></span>
+                </div>
+            </div>
+        </div>   
+        <br>  
+        <button id="show_distance_matrix" type="button" class="btn btn-sm btn-primary">Calcular distancias</button>
+        <br>  
+        <br>
+        <div id="distance_table_container">
+        </div>
+        <br>
+        <div id="export" style="display: none;">
+            <a href="/export_table" target="blank">
+                <button type="button"  class="btn btn-sm btn-primary">Exportar Tabla a CSV</button>
+            </a>
+        </div>
+        
+        
+    </div>
+
+
+
+    <!--
+    <h6>Or arrastra el archivo</h6>
+    <div class="upload-drop-zone" id="drop-zone">
+        Arrastra el archivo aqui.
+    </div>
+    
+    -->
+{% endblock%}

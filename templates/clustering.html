@@ -1,0 +1,57 @@
+{% extends 'algorithm_base.html'%}
+
+{% block description%}  
+<h2>Clustering</h2>
+<p>Descripción del algoritmo.</p>
+{% endblock%}
+
+{% block algorithm%}
+    <br>
+    <div id="metricas">
+        <!-- Preprocesamiento -->
+        {% include 'reselect_columns.html' %}
+        {% include 'show_pearson_matrix.html' %}
+        <!-- Analisis -->
+        <h5>Seleccione el método</h5>
+        <div class="row">
+            <div class="col-4">
+                <label for="metric">Método</label>
+                <select id="metric" class="form-control" name="metric">.
+                    <option value="partitional">Particional (K Means)</option>
+                    <option value="hierarchy">Jerarquico</option>
+                </select>
+            </div>
+        </div>
+        <br>
+        <!-- Pre Análisis -->
+        <h5>Mostrar Visualización para elegir el número de clusters</h5>
+        <button id="visualization_method" type="button" class="btn btn-sm btn-primary">Mostrar</button>
+        <br>  
+        <div id="visualization_method_container">
+        </div>
+        <br>
+        <!-- Clusetring --> 
+        <h5>Clustering</h5>
+        <button id="clustering_button" type="button" class="btn btn-sm btn-primary">Realizar clustering</button>
+        <br>
+        <div id="clustering_container">
+        </div>
+        <!-- Clusetring 
+        <div id="export" style="display: none;">
+            <a href="/export_table" target="blank">
+                <button type="button"  class="btn btn-sm btn-primary">Exportar Tabla a CSV</button>
+            </a>
+        </div>
+        --> 
+    </div>
+
+
+
+    <!--
+    <h6>Or arrastra el archivo</h6>
+    <div class="upload-drop-zone" id="drop-zone">
+        Arrastra el archivo aqui.
+    </div>
+    
+    -->
+{% endblock%}

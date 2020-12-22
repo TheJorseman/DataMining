@@ -90,12 +90,6 @@ $(document).ready(function () {
         });  
     });
 
-    function scrollToTop() { 
-        window.scrollTo(0, 0); 
-    }; 
-
-
-
     function correlation(){
         $("#js-loader").css("display","block");
         $.ajax({
@@ -117,4 +111,16 @@ $(document).ready(function () {
             }
         });     
     };
+
+    $('#file').on('change',function(e){
+        //get the file name
+        var fileName = e.target.files[0].name;
+        //replace the "Choose a file" label
+        $(this).next('.custom-file-label').html(fileName);
+    })
+
+    function scrollToTop() { 
+        window.scrollTo(0, 0); 
+    }; 
+
 });

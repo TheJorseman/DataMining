@@ -19,7 +19,7 @@ class Data(object):
         reader = self.reader
         response["sel_columns_html"] = reader.select_columns_html() if self.header else ""
         response["df_len"] = reader.get_df_len()
-        response["head"] = reader.get_head().to_html().replace("dataframe","table")
+        response["head"] = reader.get_head().to_html().replace("dataframe","table table-bordered")
         return response
 
     def get_columns(self):
@@ -27,6 +27,28 @@ class Data(object):
             return self.reader.get_columns()
         else:
             return ""
+
+    def get_current_columns_html(self):
+        table = TableHTML(table_class="table ")
+        columns = ["Columna"] + list(self.df.columns.values)
+        table.set_head(columns)
+        record = ["Incluir"] + self.get_record_html(list(self.df.columns.values))
+        table.add_record(record)
+        return table.get_html_table()
+
+    def get_current_columns(self):
+        return list(self.df.columns.values)
+
+    def get_record_html(self,columns):
+        template = """
+        <div class="form-check">
+            <input type="checkbox" id="{r_id}" class="form-check-input" name="{r_name}" value="{r_value}" checked>
+        </div>
+        """
+        html = []
+        for column in columns:
+            html.append(template.format(r_id=column,r_name=column,r_value=column))
+        return html
 
     def set_columns(self,columns):
         if self.table:
@@ -37,12 +59,15 @@ class Data(object):
         if n_shuffle:
             self.df = shuffle(self.df)
 
-    def get_summary(self):
-        summary = {}
+    def get_selected_columns_html(self):
         current_columns = list(self.df.columns.values) 
         columns_table = TableHTML(table_class="table-sm table-bordered")
         columns_table.add_record(current_columns)
-        summary["sel_columns_html"] = columns_table.get_html_table()
+        return columns_table.get_html_table()
+
+    def get_summary(self):
+        summary = {}
+        summary["sel_columns_html"] = self.get_selected_columns_html()
         summary["df_len"] = len(self.df.index)
         summary["filename"] = self.filename
         return summary
