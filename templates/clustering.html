@@ -6,8 +6,9 @@
 {% endblock%}
 
 {% block algorithm%}
+    <script rel="text/javascript" src="{{ url_for('static',filename='js/clustering.js')}}"></script>
     <br>
-    <div id="metricas">
+    <div id="clustering">
         <!-- Preprocesamiento -->
         {% include 'reselect_columns.html' %}
         {% include 'show_pearson_matrix.html' %}
@@ -15,18 +16,36 @@
         <h5>Seleccione el método</h5>
         <div class="row">
             <div class="col-4">
-                <label for="metric">Método</label>
-                <select id="metric" class="form-control" name="metric">.
+                <label for="clustering_method">Método</label>
+                <select id="clustering_method" class="form-control" name="clustering_method">.
                     <option value="partitional">Particional (K Means)</option>
                     <option value="hierarchy">Jerarquico</option>
                 </select>
             </div>
         </div>
         <br>
+        <h6>Número de clusters</h6>
+        <div class="row">
+            <div class="ml-3 col-xs-2">
+                <input class="form-control" type="text" id="n_clusters" value="5" placeholder="5"><span id="errmsgs" style="color: red;"></span>
+            </div>
+        </div>
+        <br>
         <!-- Pre Análisis -->
+        <div id="heuristic_container" style="display: none;">
+            <h5>Utilizar heuristica para obtener el número de clusters</h5>
+            <div id="elbow_container" style="display: none;">
+                <span>La heuristica marca </span> <span id="span_elbow">n</span> <span> clusters, Se ha actualizado el campo.</span>
+            </div>
+            <br>
+            <button id="heuristic_method" type="button" class="btn btn-sm btn-primary">Obtener</button> 
+        </div>  
+        <br>
+        <br>    
         <h5>Mostrar Visualización para elegir el número de clusters</h5>
         <button id="visualization_method" type="button" class="btn btn-sm btn-primary">Mostrar</button>
         <br>  
+        <br> 
         <div id="visualization_method_container">
         </div>
         <br>
@@ -34,8 +53,10 @@
         <h5>Clustering</h5>
         <button id="clustering_button" type="button" class="btn btn-sm btn-primary">Realizar clustering</button>
         <br>
+        <br>
         <div id="clustering_container">
         </div>
+        {% include 'export.html' %}
         <!-- Clusetring 
         <div id="export" style="display: none;">
             <a href="/export_table" target="blank">
@@ -44,14 +65,4 @@
         </div>
         --> 
     </div>
-
-
-
-    <!--
-    <h6>Or arrastra el archivo</h6>
-    <div class="upload-drop-zone" id="drop-zone">
-        Arrastra el archivo aqui.
-    </div>
-    
-    -->
 {% endblock%}

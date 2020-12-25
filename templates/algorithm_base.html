@@ -1,9 +1,10 @@
 {% extends 'base.html'%}
 {% block content%}
-<script rel="text/javascript" src="{{ url_for('static',filename='js/upload_files.js')}}"></script>
-<script rel="text/javascript" src="{{ url_for('static',filename='js/common.js')}}"></script>
+
 {% block description%}
 {% endblock%}
+<script rel="text/javascript" src="{{ url_for('static',filename='js/upload_files.js')}}"></script>
+<script rel="text/javascript" src="{{ url_for('static',filename='js/common.js')}}"></script>
 <div id="base">
     <form id="analize-file-form" method="POST" enctype="multipart/form-data">
         <h5>Archivo</h5>

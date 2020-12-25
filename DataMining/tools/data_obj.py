@@ -39,7 +39,7 @@ class Data(object):
     def get_current_columns(self):
         return list(self.df.columns.values)
 
-    def get_record_html(self,columns):
+    def get_record_html(self,columns, ):
         template = """
         <div class="form-check">
             <input type="checkbox" id="{r_id}" class="form-check-input" name="{r_name}" value="{r_value}" checked>

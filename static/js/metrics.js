@@ -1,5 +1,11 @@
 $(document).ready(function () {
 
+    if ($('#metric')[0].value == "minkowski"){
+        $("#minkowski_value").css("display","block");
+    }else{
+        $("#minkowski_value").css("display","none");
+    }
+
     $("#show_distance_matrix").click(function(){
         var form = new FormData();
         form.append("metric",$("#metric").val());
@@ -14,6 +20,8 @@ $(document).ready(function () {
             processData: false,
             success: function(response){
                 $("#distance_table_container").html(response["distance_table"]);
+                $('#distance_table').DataTable();
+                $("#export").css("display","block");
             },
             error: function(error){
                 console.log(error);

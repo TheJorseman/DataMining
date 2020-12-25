@@ -1,5 +1,6 @@
 # External Modules
-from flask import Flask, render_template, request, jsonify, send_file, Response
+from flask import Flask, render_template, request, jsonify, send_file, Response, abort
+import json
 import pandas as pd
 from io import StringIO, BytesIO
 from base64 import b64encode
@@ -11,6 +12,7 @@ from DataMining.tools.reader import Reader
 from DataMining.tools.data_obj import Data
 from DataMining.tools.table_html import TableHTML
 from DataMining.algorithms.distance import Distance
+from DataMining.algorithms.clustering import Clustering
 
 # Configurations
 matplotlib.use('Agg')
@@ -20,11 +22,34 @@ app = Flask("Data Mining")
 app.config["DATA_UPLOAD"] = "/uploads"
 data_config = {}
 
+
+def df_to_csv(df, decimal_round=3):
+    file = StringIO()
+    df.round(decimal_round).to_csv(file)
+    return file.getvalue()
+
+def set_export_data(file,filename):
+    global data_config
+    # Export Data #########################################
+    data_config["EXPORT_FILE"] = file
+    data_config["EXPORT_FILENAME"] = filename
+    #######################################################
+
 def get_image_b64(b64encoded):
     image = """
         <img src="data:image/png;base64,{b64}"/>
     """
     return image.format(b64=b64encoded.decode("utf-8"))
+
+def get_html_by_figure(figure):
+    pic_IObytes = BytesIO()
+    figure.savefig(pic_IObytes,format='png')
+    pic_IObytes.seek(0)
+    pic_hash = b64encode(pic_IObytes.read())
+    image_hash = get_image_b64(pic_hash)
+    plt.close()
+    return image_hash
+
 
 def get_correlation_heatmap(matrix_correlation):
     from matplotlib import rcParams
@@ -43,7 +68,9 @@ def get_correlation_heatmap(matrix_correlation):
     pic_IObytes.seek(0)
     return b64encode(pic_IObytes.read())
 
-
+def load_clustering(method):
+    data = data_config["DATA"]
+    return Clustering(data.df,data.filename,method)
 
 @app.route("/pearson_correlation_heatmap", methods=["GET"])
 def pearson_correlation_heatmap():
@@ -67,9 +94,22 @@ def get_current_columns():
 def get_visualization_method():
     response = {}
     if "DATA" in data_config:
-        response["visualization_method"] = None
-        response["sel_columns_html"] = data_config["DATA"].get_current_columns_html()
-        response["columns"] = data_config["DATA"].get_current_columns()
+        cluster = load_clustering(request.form["method"])
+        figure = cluster.get_visualization_method()
+        response["visualization_html"] = get_html_by_figure(figure)
+    else:
+        Warning("No hay un archivo cargado.")
+    return jsonify(response)
+
+@app.route("/get_heuristic_method", methods=["POST"])
+def get_heuristic_method():
+    response = {}
+    if "DATA" in data_config:
+        cluster = load_clustering(request.form["method"])
+        value = cluster.get_heuristic_method()
+        response["elbow"] = int(value)
+    else:
+        Warning("No hay un archivo cargado.")
     return jsonify(response)
 
 @app.route("/set_current_columns", methods=["POST"])
@@ -92,7 +132,10 @@ def apriori_process():
         from apyori import apriori
         rules = apriori(data_config["DATA"].get_apyori_list(), min_support=min_sup, min_confidence=min_conf, min_lift=min_lif, min_length=2)
         rules = list(rules)
-        response["html"] = TableHTML(table_class="table table-hover").apriori_table(rules)
+        response["html"] = TableHTML(table_class="table table-hover",table_id="apriori_table").apriori_table(rules)
+        if not "<h5>" in response["html"]:
+            df = pd.read_html(response["html"])[0]
+            set_export_data(df_to_csv(df),"apriori_rules.csv")
     return jsonify(response)
 
 @app.route("/correlation_process", methods=["POST"])
@@ -100,19 +143,50 @@ def correlation_process():
     response = {}
     if "DATA" in data_config:
         matrix_correlation = data_config["DATA"].df.corr(method='pearson')
-        response["correlation_matrix_html"] = matrix_correlation.to_html().replace("dataframe","table")
+        response["correlation_matrix_html"] = matrix_correlation.to_html(table_id='correlation_table').replace("dataframe","table")
         pic_hash = get_correlation_heatmap(matrix_correlation)
         response["heatmap_html"] = get_image_b64(pic_hash)
         plt.close()
         response["options"] = data_config["DATA"].get_options_html()
+        set_export_data(df_to_csv(matrix_correlation),"correlation.csv")
+    return jsonify(response)
+
+@app.route("/clustering_process", methods=["POST"])
+def clustering_process():
+    response = {}
+    if "DATA" in data_config:
+        cluster = load_clustering(request.form["method"])
+        clusters_df = cluster.get_clusters(int(request.form["n_clusters"]))
+        response["clustering_summary"] = clusters_df.to_html(index=False,table_id='clustering_table').replace("dataframe","table table-bordered")
+        set_export_data(cluster.get_export_file(),"clusters.csv")
+    return jsonify(response)
+
+@app.route("/calc_distance", methods=["POST"])
+def calc_distance():
+    global data_config
+    response = {}
+    if request.form and "DATA" in data_config:
+        method = request.form["metric"]
+        distance = Distance(data_config["DATA"].df , dict(request.form))
+        distance_table = distance.get_matrix_table()
+        title = "<h5>Matriz de Distancias</h5>"
+        response["distance_table"] = title + distance_table
+        set_export_data(distance.get_export_file(),"distance_matrix.csv")
+        """
+        # Export Data #########################################
+        data_config["EXPORT_FILE"] = distance.get_export_file()
+        data_config["EXPORT_FILENAME"] = "distance_matrix.csv"
+        #######################################################
+        """
     return jsonify(response)
 
 @app.route("/analize_data", methods=["POST"])
 def analize_data():
     global data_config
     response = {}
-    if request.files:
-        file = request.files["file"].read().decode("utf-8")
+    file_content = request.files["file"].read().decode("utf-8")
+    if len(file_content) > 0:
+        file = file_content
         filename = request.files["file"].filename
         header = True if "header" in request.form else False
         table = True if "is_table" in request.form else False
@@ -120,10 +194,8 @@ def analize_data():
         response = data_config["DATA"].get_dict_data_analize()
         response["columns"] = data_config["DATA"].get_columns()
     else:
-        raise Warning("No se ha seleccionado un archivo")
+        Warning("No existe un archivo a analizar")
     return jsonify(response)
-
-
 
 @app.route("/save_conf", methods=["POST"])
 def save_conf():
@@ -158,21 +230,7 @@ def plot_graph():
     plt.close()
     return jsonify(response)
 
-@app.route("/calc_distance", methods=["POST"])
-def calc_distance():
-    global data_config
-    response = {}
-    if request.form and "DATA" in data_config:
-        method = request.form["metric"]
-        distance = Distance(data_config["DATA"].df , dict(request.form))
-        distance_table = distance.get_matrix_table()
-        title = "<h5>Matriz de Distancias</h5>"
-        response["distance_table"] = title + distance_table
-        # Export Data #########################################
-        data_config["EXPORT_FILE"] = distance.get_export_file()
-        data_config["EXPORT_FILENAME"] = "distance_matrix.csv"
-        #######################################################
-    return jsonify(response)
+
 
 @app.route("/export_table")
 def export_table():
@@ -183,6 +241,25 @@ def export_table():
         mimetype="text/csv",
         headers={"Content-disposition":
                  export_name})
+
+
+"""
+Error Handler
+"""
+
+@app.errorhandler(Exception)
+def handle_exception(e):
+    """Return JSON instead of HTML for HTTP errors."""
+    # start with the correct headers and status code from the error
+    response = {
+        "name": e.__class__.__name__,
+        "description": e.args[0],
+    }
+    return jsonify(response), 408
+
+"""
+Error Handler
+"""
 
 
 @app.route("/apriori")
@@ -208,6 +285,7 @@ def about():
 @app.route("/")
 def index():
     return render_template("index.html")
+
 
 app.run(debug=True,port=8000)
 

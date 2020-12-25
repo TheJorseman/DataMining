@@ -1,7 +1,9 @@
 $(document).ready(function () {
-
+    if ($('input[type=file]')[0].files.length){
+        $(".custom-file-label").html($('input[type=file]')[0].files[0].name);
+    }
+    
     $("#upload-file-btn").click(function(){
-        console.log("Se quiere subir un archivo");
         var form_data = new FormData($('#upload-file')[0]);
         form_data.append("support",$('#support')[0].value);
         form_data.append("confidence",$('#confidence')[0].value);
@@ -18,7 +20,11 @@ $(document).ready(function () {
                 var HTML = response["html"];
                 $("#rules_container").html(HTML);
                 $("#js-loader").css("display","none");
-                console.log(HTML);
+                if( $('#apriori_table').length){
+                    $('#apriori_table').DataTable();
+                    $("#export").css("display","block");
+                }
+                
             },
             error: function(error){
                 $("#js-loader").css("display","none");
@@ -49,7 +55,10 @@ $(document).ready(function () {
             },
             error: function(error){
                 $("#js-loader").css("display","none");
-                console.log(error);
+                $("#modal_title").text(error.responseJSON["name"]);
+                $("#modal_content").text(error.responseJSON["description"]);
+                $('#info-modal').modal('show');
+                console.log(error.responseJSON);
             }
         });    
     });
@@ -103,6 +112,8 @@ $(document).ready(function () {
                 $("#heatmap").html(response["heatmap_html"]);
                 $("#var_abscisa").html(response["options"]);
                 $("#var_neat").html(response["options"]);
+                $('#correlation_table').DataTable();
+                $("#export").css("display","block");
                 $("#js-loader").css("display","none");
             },
             error: function(error){

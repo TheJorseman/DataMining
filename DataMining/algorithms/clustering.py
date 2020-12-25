@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+from io import StringIO
 #Se importan las bibliotecas de clustering jerárquico
 import scipy.cluster.hierarchy as shc
 from sklearn.cluster import AgglomerativeClustering
@@ -8,46 +9,89 @@ from sklearn.cluster import AgglomerativeClustering
 from sklearn.cluster import KMeans
 from sklearn.metrics import pairwise_distances_argmin_min
 
+from kneed import KneeLocator
+
 class Clustering(object):
     def __init__(self, df, name, method):
-        super().__init__()
-        self.df = df
+        self.df = df.copy()
         self.name = name
         self.method = method
         self.x_label = 'Observaciones'
         self.y_label = 'Distancia'
         self.len_columns = len(list(self.df.columns.values))
-        self.kmeans_elbow_range = range(2, len_columns) if len_columns > 2 else range(len_columns-1, len_columns) 
+        self.decimal_round = 3
+        self.elbow_range = range(2, self.len_columns) if self.len_columns > 2 else range(self.len_columns-1, self.len_columns) 
+
+    def get_agglomerative_clusters(self,n_clusters, affinity='euclidean', linkage='complete'):
+        MJerarquico = AgglomerativeClustering(n_clusters=n_clusters, affinity=affinity, linkage=linkage)
+        MJerarquico.fit_predict(self.df.values)
+        return MJerarquico
+
+    def get_kmeans_clusters(self,n_clusters, random_state=0):
+        km = KMeans(n_clusters=n_clusters, random_state=random_state)
+        km.fit(self.df.values)
+        return km
 
     def get_dendogram(self):
-        #Se crea el árbol
-        plt.figure(figsize=(10, 7))
+        figure = plt.figure()
         plt.title(self.name)
         plt.xlabel(self.x_label)
         plt.ylabel(self.y_label)
-        Arbol = shc.dendrogram(shc.linkage(self.df.values, method='complete'))
-        return Arbol
+        shc.dendrogram(shc.linkage(self.df.values, method='complete'))
+        return figure
 
-    def get_elbow_method(self):
-        SSE = []
-        for i in self.kmeans_elbow_range:
-            km = KMeans(n_clusters=i, random_state=0)
-            km.fit(self.df.values)
-            SSE.append(km.inertia_)
-        #Se grafica SSE en función de k
-        plt.figure(figsize=(10, 7))
-        plt.plot(self.kmeans_elbow_range, SSE, marker='o')
+    def get_kmeans_visualization_method(self):
+        SSE = self.get_clustering_list(self.get_kmeans_clusters)
+        figure = plt.figure()
+        plt.plot(self.elbow_range, SSE, marker='o')
         plt.xlabel('Cantidad de clusters *k*')
         plt.ylabel('SSE')
         plt.title('Elbow Method')
-        plt.show()
-        return 
+        return figure
+
+    def get_clustering_list(self, function):
+        SSE = []
+        for i in self.elbow_range:
+            algorithm = function(i)
+            algorithm.fit(self.df.values)
+            SSE.append(algorithm.inertia_) 
+        return SSE
 
     def get_visualization_method(self):
-        if self.method == "hierachy":
+        if self.method == "hierarchy":
             return self.get_dendogram()
         else:
-            return self.get_elbow_method()
+            return self.get_kmeans_visualization_method()
 
-    
-            
+    def get_elbow_method(self, function):
+        SSE = self.get_clustering_list(function)
+        knee = KneeLocator(self.elbow_range, SSE, curve="convex", direction="decreasing")    
+        return knee.elbow
+
+    def get_heuristic_method(self):
+        if self.method == "hierarchy":
+            return self.get_elbow_method(self.get_agglomerative_clusters)
+        else:
+            return self.get_elbow_method(self.get_kmeans_clusters)
+
+    def get_cluster_summary(self, function, n_clusters):
+        clusters = function(n_clusters)
+        self.df['clusterH'] = clusters.labels_
+        mean = self.df.groupby(['clusterH']).mean()
+        mean["#Registros"] = self.df.groupby(['clusterH'])['clusterH'].count()
+        mean["#Cluster"] = pd.Series(data=range(0,len(mean["#Registros"])))
+        mean_ordered = mean.reindex(sorted(mean.columns), axis=1) 
+        self.cluster_df = mean_ordered
+        return mean_ordered
+
+    def get_clusters(self, n_clusters):
+        if self.method == "hierarchy":
+            return self.get_cluster_summary(self.get_agglomerative_clusters, n_clusters)
+        else:
+            return self.get_cluster_summary(self.get_kmeans_clusters, n_clusters)
+        return
+
+    def get_export_file(self):
+        file = StringIO()
+        self.cluster_df.round(self.decimal_round).to_csv(file)
+        return file.getvalue()

@@ -3,6 +3,23 @@
 {% block description%}  
 <h2>Algoritmo Apriori.</h2>
 <p>Es un algoritmo que permite encontrar de forma eficiente "conjuntos de ítems frecuentes", los cuales sirven de base para generar reglas de asociación. </p>
+<img src="/static/img/RAsociacion.png">
+<br>
+<strong>Estos patrones</strong><span>tienen cierta frecuencia (ocurrencia) en los datos.</span><br>
+<strong>Por ejemplo:</strong>
+<ul style="list-style-type:disc">
+    <li>Artículos que se compran juntos con frecuencia.</li>
+    <li>Síntomas asociados a un diagnóstico.</li>
+</ul>
+<strong>Usos:</strong>
+<ul style="list-style-type:disc">
+    <li>Colocación de productos.</li>
+    <li>Publicidad dirigida.</li>
+    <li>Ventas.</li>
+    <li>Cupones (compras, descuentos).</li>
+</ul>
+<br>
+<strong>Objetivo:</strong><span>Aumentar las ventas y reducir los costos.</span><br><br>
 {% endblock%}
 
 {% block algorithm%}  
@@ -46,7 +63,7 @@
     
     </div>
 
-
+    {% include 'export.html' %}
     <!--
     <h6>Or arrastra el archivo</h6>
     <div class="upload-drop-zone" id="drop-zone">

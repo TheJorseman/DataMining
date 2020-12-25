@@ -7,12 +7,13 @@ class TableHTML(object):
     </tr>    
     """
 
-    def __init__(self, table_class="table"):
+    def __init__(self, table_class="table", table_id="table"):
         super().__init__()
         self.table_class = table_class
         self.columns = list()
         self.records = list()
         self.round = 3
+        self.table_id = table_id
 
     def set_head(self,columns):
         self.columns = columns
@@ -46,7 +47,7 @@ class TableHTML(object):
 
     def table_template(self):
         table_html = """
-        <table class="{table_class}">
+        <table id="{table_id}" class="{table_class}">
         <thead>
             {table_head}
         </thead>
@@ -55,7 +56,7 @@ class TableHTML(object):
         </tbody>
         </table>
         """
-        return table_html.format(table_class=self.table_class, table_head=self.get_table_head(), table_body=self.get_table_body())
+        return table_html.format(table_id=self.table_id,table_class=self.table_class, table_head=self.get_table_head(), table_body=self.get_table_body())
 
 
     def apriori_table(self,rules):

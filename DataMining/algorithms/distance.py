@@ -24,7 +24,7 @@ class Distance(object):
         return file.getvalue()
 
     def get_matrix_table(self):
-        return self.matrix_df.round(self.decimal_round).to_html().replace("dataframe","table table-bordered")
+        return self.matrix_df.round(self.decimal_round).to_html(table_id="distance_table").replace("dataframe","table table-bordered")
 
     def calculate_distance_matrix(self):
         shape = self.df.shape
