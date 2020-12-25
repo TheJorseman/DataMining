@@ -14,10 +14,17 @@ $(document).ready(function () {
                 $("#graph_container").html(response["plot"]);
             },
             error: function(error){
+                set_modal(error);
                 $("#js-loader").css("display","none");
-                console.log(error);
+                
             }
         });  
     });
+
+    function set_modal(error){
+        $("#modal_title").text(error.responseJSON["name"]);
+        $("#modal_content").text(error.responseJSON["description"]);
+        $('#info-modal').modal('show');
+    };
      
 });

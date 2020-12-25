@@ -24,7 +24,7 @@ $(document).ready(function () {
                 $("#export").css("display","block");
             },
             error: function(error){
-                console.log(error);
+                set_modal(error);
             }
         });  
         $("#js-loader").css("display","none");
@@ -56,4 +56,9 @@ $(document).ready(function () {
 
     });
 
+    function set_modal(error){
+        $("#modal_title").text(error.responseJSON["name"]);
+        $("#modal_content").text(error.responseJSON["description"]);
+        $('#info-modal').modal('show');
+    };
 });

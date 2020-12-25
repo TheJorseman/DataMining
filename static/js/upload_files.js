@@ -28,7 +28,7 @@ $(document).ready(function () {
             },
             error: function(error){
                 $("#js-loader").css("display","none");
-                console.log(error);
+                set_modal(error);
             }
         });
     });
@@ -55,10 +55,7 @@ $(document).ready(function () {
             },
             error: function(error){
                 $("#js-loader").css("display","none");
-                $("#modal_title").text(error.responseJSON["name"]);
-                $("#modal_content").text(error.responseJSON["description"]);
-                $('#info-modal').modal('show');
-                console.log(error.responseJSON);
+                set_modal(error);
             }
         });    
     });
@@ -94,7 +91,7 @@ $(document).ready(function () {
             },
             error: function(error){
                 $("#js-loader").css("display","none");
-                console.log(error);
+                set_modal(error);
             }
         });  
     });
@@ -118,7 +115,7 @@ $(document).ready(function () {
             },
             error: function(error){
                 //$("#js-loader").css("display","none");
-                console.log(error);
+                set_modal(error);
             }
         });     
     };
@@ -134,4 +131,9 @@ $(document).ready(function () {
         window.scrollTo(0, 0); 
     }; 
 
+    function set_modal(error){
+        $("#modal_title").text(error.responseJSON["name"]);
+        $("#modal_content").text(error.responseJSON["description"]);
+        $('#info-modal').modal('show');
+    };
 });
