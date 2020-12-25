@@ -98,7 +98,7 @@ def get_visualization_method():
         figure = cluster.get_visualization_method()
         response["visualization_html"] = get_html_by_figure(figure)
     else:
-        Warning("No hay un archivo cargado.")
+        raise Warning("No hay un archivo cargado.")
     return jsonify(response)
 
 @app.route("/get_heuristic_method", methods=["POST"])
@@ -109,7 +109,7 @@ def get_heuristic_method():
         value = cluster.get_heuristic_method()
         response["elbow"] = int(value)
     else:
-        Warning("No hay un archivo cargado.")
+        raise Warning("No hay un archivo cargado.")
     return jsonify(response)
 
 @app.route("/set_current_columns", methods=["POST"])
@@ -172,12 +172,6 @@ def calc_distance():
         title = "<h5>Matriz de Distancias</h5>"
         response["distance_table"] = title + distance_table
         set_export_data(distance.get_export_file(),"distance_matrix.csv")
-        """
-        # Export Data #########################################
-        data_config["EXPORT_FILE"] = distance.get_export_file()
-        data_config["EXPORT_FILENAME"] = "distance_matrix.csv"
-        #######################################################
-        """
     return jsonify(response)
 
 @app.route("/analize_data", methods=["POST"])
@@ -194,7 +188,7 @@ def analize_data():
         response = data_config["DATA"].get_dict_data_analize()
         response["columns"] = data_config["DATA"].get_columns()
     else:
-        Warning("No existe un archivo a analizar")
+        raise Warning("No existe un archivo a analizar")
     return jsonify(response)
 
 @app.route("/save_conf", methods=["POST"])

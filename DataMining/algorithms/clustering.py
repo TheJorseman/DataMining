@@ -75,7 +75,10 @@ class Clustering(object):
             return self.get_elbow_method(self.get_kmeans_clusters)
 
     def get_cluster_summary(self, function, n_clusters):
-        clusters = function(n_clusters)
+        try:
+            clusters = function(n_clusters)
+        except ValueError:
+            raise ValueError("El numero de clusters excede el número de registros {}>{}".format(n_clusters,self.df.shape[0]) )
         self.df['clusterH'] = clusters.labels_
         mean = self.df.groupby(['clusterH']).mean()
         mean["#Registros"] = self.df.groupby(['clusterH'])['clusterH'].count()
