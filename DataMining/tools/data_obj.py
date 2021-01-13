@@ -28,8 +28,8 @@ class Data(object):
         else:
             return ""
 
-    def get_current_columns_html(self):
-        table = TableHTML(table_class="table ")
+    def get_current_columns_html(self, table_id="table"):
+        table = TableHTML(table_class="table ",table_id=table_id)
         columns = ["Columna"] + list(self.df.columns.values)
         table.set_head(columns)
         record = ["Incluir"] + self.get_record_html(list(self.df.columns.values))

@@ -2,18 +2,36 @@
 
 {% block description%}  
 <h2>Metricas</h2>
-<p>
-    Una métrica o función distancia es una función que define una distancia entre cada par de elementos de un conjunto. <br>
-    Es de gran importancia en Inteligencia Artificial en las áreas de reconocimiento de patrones, minería de datos, clustering, recuperación de información, lógica no binaria, etc.<br>
-    <br>
-    Existen diferentes métricas como:
-    <ul style="list-style-type:disc">
-        <li>Métrica euclidiana.</li>
-        <li>Métrica Chebyshev.</li>
-        <li>Métrica Manhattan.</li>
-        <li>Métrica Minkowski.</li>
-    </ul>   
-</p>
+<div id="accordion">
+    <div class="card">
+      <div class="card-header" id="headingOne">
+        <h5 class="mb-0">
+          <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            Descripción
+          </button>
+        </h5>
+      </div>
+  
+      <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+        <div class="card-body">
+            <div>
+                <p>
+                    Una métrica o función distancia es una función que define una distancia entre cada par de elementos de un conjunto. <br>
+                    Es de gran importancia en Inteligencia Artificial y en las áreas de reconocimiento de patrones, minería de datos, clustering, recuperación de información, lógica no binaria, etc.<br>
+                    <br>
+                    Existen diferentes métricas como:
+                    <ul style="list-style-type:disc">
+                        <li>Métrica euclidiana.</li>
+                        <li>Métrica Chebyshev.</li>
+                        <li>Métrica Manhattan.</li>
+                        <li>Métrica Minkowski.</li>
+                    </ul>   
+                </p>
+            </div>            
+        </div>
+      </div>
+    </div>
+</div>
 {% endblock%}
 
 {% block algorithm%}

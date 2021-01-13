@@ -12,7 +12,17 @@ from sklearn.metrics import pairwise_distances_argmin_min
 from kneed import KneeLocator
 
 class Clustering(object):
+    """
+    Clase que implementa los dos métodos de clustering.
+    """    
     def __init__(self, df, name, method):
+        """
+        Esta clase necesita:
+        Args:
+            df (dataframe): Dataframe de pandas que contiene la información numérica para hacer el clustering.
+            name (str): [description]
+            method ([type]): [description]
+        """        
         self.df = df.copy()
         self.name = name
         self.method = method
@@ -78,7 +88,7 @@ class Clustering(object):
         try:
             clusters = function(n_clusters)
         except ValueError:
-            raise ValueError("El numero de clusters excede el número de registros {}>{}".format(n_clusters,self.df.shape[0]) )
+            raise ValueError("El número de clusters excede el número de registros {}>{}".format(n_clusters,self.df.shape[0]) )
         self.df['clusterH'] = clusters.labels_
         mean = self.df.groupby(['clusterH']).mean()
         mean["#Registros"] = self.df.groupby(['clusterH'])['clusterH'].count()

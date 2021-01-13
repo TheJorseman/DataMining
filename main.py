@@ -174,6 +174,48 @@ def calc_distance():
         set_export_data(distance.get_export_file(),"distance_matrix.csv")
     return jsonify(response)
 
+
+@app.route("/get_log_regression_vars", methods=["GET"])
+def get_log_regression_vars():
+    global data_config
+    response = {}
+    if "DATA" in data_config:
+        response["colum-sel"] = data_config["DATA"].get_current_columns_html(table_id="table-input-reg")
+        response["options"] = data_config["DATA"].get_options_html()
+    else:
+        raise Warning("No existe un archivo a analizar")
+    return jsonify(response)
+
+
+def parse_response_regression(form):
+    data = {}
+    columns = data_config["DATA"].get_current_columns().copy()
+    data["train_percent"] = int(form.get("train-percent",0))
+    if form.get("input",False):
+        output = columns[0]
+        data["output_column"] = [output]
+        data["input_columns"] = columns[1:]
+    else:
+        data["output_column"] = [form.get("output")]
+        new_columns = [column for column in columns if column in form.keys()]
+        if form.get("output") in new_columns:
+            new_columns.remove(form.get("output"))
+        data["input_columns"] = new_columns
+    return data
+
+
+@app.route("/logistic_regression", methods=["POST"])
+def logistic_regression():
+    global data_config
+    response = {}
+    if request.form and "DATA" in data_config:
+        data = parse_response_regression(request.form)
+    else:
+        raise Warning("No existe un archivo a analizar")
+    return jsonify(response)
+
+
+
 @app.route("/analize_data", methods=["POST"])
 def analize_data():
     global data_config
@@ -255,6 +297,9 @@ def handle_exception(e):
 Error Handler
 """
 
+@app.route("/regression")
+def regression():
+    return render_template("regression.html")
 
 @app.route("/apriori")
 def apriori():

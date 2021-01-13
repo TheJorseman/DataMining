@@ -2,40 +2,58 @@
 
 {% block description%}  
 <h2>Clustering</h2>
-<p>
-    La Minería de Datos, como subdominio de la Inteligencia Artificial, aplicada a la definición
-    de cluster consiste en la segmentación y delimitación de grupos de elementos, que son
-    unidos por características comunes que éstos comparten (aprendizaje no supervisado).
-</p>
-<p>
-    El objetivo es dividir una población heterogénea de datos en un número de grupos naturales
-    (regiones o segmentos homogéneos), de acuerdo a la similitud de sus elementos.
-</p>
-<p>Métodos para hacer clustering</p>
-<ul style="list-style-type:disc">
-    <li>
-        <strong>Clustering Jerarquico.</strong><br>
-        <span>
-            Organiza los
-            elementos, de
-            manera recursiva,
-            en una estructura
-            en forma de árbol.
-        </span>
-    </li>
-    <li>
-        <strong>Clustering Particional.</strong><br>
-        <span>
-            Organiza los
-            registros dentro
-            de k grupos.
-        </span>
-    </li>
-</ul> 
-
-<strong>Los métodos particionales </strong> <span>tienen ventajas en aplicaciones que involucran <strong> gran cantidad de
-    datos</strong>, para los cuales, la construcción de un árbol puede resultar complejo.
-</span>
+<div id="accordion">
+    <div class="card">
+      <div class="card-header" id="headingOne">
+        <h5 class="mb-0">
+          <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            Descripción
+          </button>
+        </h5>
+      </div>
+  
+      <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+        <div class="card-body">
+            <div>
+                <p>
+                    La Minería de Datos, como subdominio de la Inteligencia Artificial, aplicada a la definición
+                    de cluster consiste en la segmentación y delimitación de grupos de elementos, que son
+                    unidos por características comunes que éstos comparten (aprendizaje no supervisado).
+                </p>
+                <p>
+                    El objetivo es dividir una población heterogénea de datos en un número de grupos naturales
+                    (regiones o segmentos homogéneos), de acuerdo a la similitud de sus elementos.
+                </p>
+                <p>Métodos para hacer clustering</p>
+                <ul style="list-style-type:disc">
+                    <li>
+                        <strong>Clustering Jerarquico.</strong><br>
+                        <span>
+                            Organiza los
+                            elementos, de
+                            manera recursiva,
+                            en una estructura
+                            en forma de árbol.
+                        </span>
+                    </li>
+                    <li>
+                        <strong>Clustering Particional.</strong><br>
+                        <span>
+                            Organiza los
+                            registros dentro
+                            de k grupos.
+                        </span>
+                    </li>
+                </ul> 
+                
+                <strong>Los métodos particionales </strong> <span>tienen ventajas en aplicaciones que involucran <strong> gran cantidad de
+                    datos</strong>, para los cuales, la construcción de un árbol puede resultar complejo.
+                </span>
+            </div>            
+        </div>
+      </div>
+    </div>
+</div>
 <br>
 <br>
 {% endblock%}

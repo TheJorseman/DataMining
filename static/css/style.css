@@ -8,6 +8,14 @@ https://www.schemecolor.com/shiny-blue-color-scheme.php
     background-color: rgba(0, 0, 0, 0.4);
 }
 
+.btn-primary-custom{
+    background-color: #25476D;
+}
+
+.btn-secondary{
+    background-color: #4F7298 !important;
+}
+
 body {
     font-family: 'Poppins', sans-serif;
     background: #fafafa;

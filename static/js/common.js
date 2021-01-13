@@ -80,4 +80,10 @@ $(document).ready(function () {
         $("#modal_content").text(error.responseJSON["description"]);
         $('#info-modal').modal('show');
     };
+
+
+    $("#button-toggle-sidebar").on('click', function () {
+        console.log("Toggle");
+        $('#sidebar').toggleClass('active');
+    });
 });

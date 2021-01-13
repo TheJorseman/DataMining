@@ -23,9 +23,8 @@
     <!-- Font Awesome JS -->
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
-    <script rel="text/javascript" src="{{ url_for('static',filename='js/slider_js.js')}}"></script>
+    <script rel="text/javascript" src="{{ url_for('static',filename='js/common.js')}}"></script>
 </head>
-
 <body>
     <div class="wrapper">
         <!-- Sidebar  -->
@@ -52,6 +51,9 @@
                         <li>
                             <a href="/clustering">Clustering</a>
                         </li>
+                        <li>
+                            <a href="/regression">Regresión Logística</a>
+                        </li>
                     </ul>
                 </li>
                 <li>
@@ -61,6 +63,11 @@
         <!-- Page Content  -->
         <div id="content" style="background-color: #F5F5F6;">
 
+            <button id="button-toggle-sidebar" type="button" class="btn btn-primary-custom">
+                <i class="fas fa-bars" style="color: aliceblue;"></i>
+            </button>
+
+            <br>
             {% include 'modal.html' %} 
 
             <div id="js-loader" style="display: none;">

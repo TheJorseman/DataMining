@@ -4,7 +4,7 @@
 {% block description%}
 {% endblock%}
 <script rel="text/javascript" src="{{ url_for('static',filename='js/upload_files.js')}}"></script>
-<script rel="text/javascript" src="{{ url_for('static',filename='js/common.js')}}"></script>
+<script rel="text/javascript" src="{{ url_for('static',filename='js/slider_js.js')}}"></script>
 <div id="base">
     <form id="analize-file-form" method="POST" enctype="multipart/form-data">
         <h5>Archivo</h5>
@@ -34,8 +34,8 @@
         <br>
         <form id="config-data-form" method="POST" enctype="multipart/form-data"></form>
             <div>
+                <h5>Seleccione las caracteristicas que desea incluir en el analisis</h5>
                 <div id="features">
-                    <h5>Seleccione las caracteristicas que desea incluir en el analisis</h5>
                 </div>
                 <br>
                 <h5>Datos de la tabla</h5>

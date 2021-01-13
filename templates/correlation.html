@@ -2,17 +2,35 @@
 
 {% block description%}  
 <h2>Correlación de Pearson</h2>
-<p>Los valores de correlación son conocidos como coeficiente de correlación de Pearson.</p>
-<p>El CDA (Análisis Correlacional de Datos) es útil para reducir el número de variables.</p>
-<p>De un espacio de alta dimensión, a en uno de un menor número de dimensiones.</p>
-<p>Esto se logra a través de la identificación de variables significativas.</p>
-<strong>Intervalos para la identificación de correlaciones:</strong> <br>
-<span>
-De <strong> -1.0 a -0.67 y 0.67 a 1.0 </strong> se conocen como <strong> correlaciones fuertes o altas.</strong><br>
-De <strong> -0.66 a -0.34 y 0.34 a 0.66 </strong> se conocen como <strong> correlaciones moderadas o medias.</strong><br>
-De <strong> -0.33 a 0.0 y 0.0 a 0.33 </strong> se conocen <strong> correlaciones débiles o bajas.</strong><br>
-</span>
-<br>
+<div id="accordion">
+    <div class="card">
+      <div class="card-header" id="headingOne">
+        <h5 class="mb-0">
+          <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            Descripción
+          </button>
+        </h5>
+      </div>
+  
+      <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+        <div class="card-body">
+            <div>
+                <p>Los valores de correlación son conocidos como coeficiente de correlación de Pearson.</p>
+                <p>El CDA (Análisis Correlacional de Datos) es útil para reducir el número de variables.</p>
+                <p>De un espacio de alta dimensión, a en uno de un menor número de dimensiones.</p>
+                <p>Esto se logra a través de la identificación de variables significativas.</p>
+                <strong>Intervalos para la identificación de correlaciones:</strong> <br>
+                <span>
+                De <strong> -1.0 a -0.67 y 0.67 a 1.0 </strong> se conocen como <strong> correlaciones fuertes o altas.</strong><br>
+                De <strong> -0.66 a -0.34 y 0.34 a 0.66 </strong> se conocen como <strong> correlaciones moderadas o medias.</strong><br>
+                De <strong> -0.33 a 0.0 y 0.0 a 0.33 </strong> se conocen <strong> correlaciones débiles o bajas.</strong><br>
+                </span>
+                <br>
+            </div>            
+        </div>
+      </div>
+    </div>
+</div>
 {% endblock%}
 
 {% block algorithm%}

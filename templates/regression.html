@@ -1,0 +1,92 @@
+{% extends 'algorithm_base.html'%}
+
+{% block description%}  
+<h2>Regresión Logística</h2>
+<div id="accordion">
+    <div class="card">
+      <div class="card-header" id="var-ser-h">
+        <h5 class="mb-0">
+          <button class="btn btn-link" data-toggle="collapse" data-target="#var-collapse" aria-expanded="true" aria-controls="var-collapse">
+            Descripción
+          </button>
+        </h5>
+      </div>
+  
+      <div id="var-collapse" class="collapse show" aria-labelledby="var-ser-h" data-parent="#accordion">
+        <div class="card-body">
+            <div>
+                Descripción.
+            </div>            
+        </div>
+      </div>
+    </div>
+</div>
+{% endblock%}
+
+{% block algorithm%}
+<script rel="text/javascript" src="{{ url_for('static',filename='js/regression.js')}}"></script>
+<!-- Regresion Logistica -->
+
+<!-- Seleccion de Variables -->
+<br>
+<div id="var-selection">
+    <div class="card">
+        <div class="card-header" id="var-sel-head">
+          <h5 class="mb-0">
+            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#var-sel-collaps" aria-expanded="false" aria-controls="var-sel-collaps">
+                Seleccion de Variables
+            </button>
+          </h5>
+        </div>
+        <div id="var-sel-collaps" class="collapse" aria-labelledby="var-sel-head" data-parent="#var-selection">
+          <div class="card-body">
+                <strong>Variables de Entrada</strong>
+                <br>
+                <div id="input-var-reg">
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-3">
+                        <strong>Variable de Salida</strong>
+                        <br>
+                        <select id="output-var-reg" class="form form-control" name="output-var-reg">
+                            <option value="test">VAR 1</option>
+                        </select>
+                    </div>
+                </div>
+          </div>
+        </div>
+    </div>
+</div>
+<!-- Seleccionar el valor de entrenamiento -->
+<br>
+<div id="train-percent">
+    <h6>Porcentaje de datos para el entrenamiento</h6>
+    <div class="slidecontainer">
+        <label for="train-percent-input">Porcentaje Entrenamiento</label>
+        <input type="text" id="train-percent-input" class="form-control" placeholder="75" disabled>
+        <input type="range" min="0" max="100" value="75" step="1" class="slider" id="train-percent-slider">
+    </div>
+    <div class="row">
+        <div class="col-3">
+            <label for="test-percent-input">Porcentaje Test</label>
+            <input type="text" id="test-percent-input" class="form-control" placeholder="25" disabled>
+        </div>
+    </div>
+</div>
+<!-- Entrenamiento -->
+<br>
+<h6>Entrenamiento</h6>
+<div>
+    <button id="train-regression" type="button" class="btn btn-sm btn-primary">Entrenar Modelo</button>
+</div>
+<!-- Metricas -->
+<!-- Inferencia -->
+
+<!-- Regresion Lineal-->
+<!-- Seleccion de Variables -->
+<!-- Seleccionar el valor de entrenamiento -->
+<!-- Entrenamiento -->
+<!-- Metricas -->
+<!-- Inferencia -->
+{% endblock%}
