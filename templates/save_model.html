@@ -1,0 +1,17 @@
+
+<script rel="text/javascript" src="{{ url_for('static',filename='js/save_model.js')}}"></script>
+<br>
+<div id="save_model" style="display: none;">
+    <h5>Guardar el Modelo</h5>
+    <div class="form-group">
+        <label for="model_name">Nombre del modelo</label>
+        <input type="text" class="form-control" id="model_name" placeholder="Nombre del modelo">
+    </div>
+    <br>
+    <button id="save-model-btn" type="button" class="btn btn-sm btn-primary">Guardar</button>
+    <br>
+    <br>
+    <div id="show_inference_link" style="display: none;">
+        <a class="btn btn-primary" href="/inference">Probar Modelo</a>
+    </div>
+</div>

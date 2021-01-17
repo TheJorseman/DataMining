@@ -64,7 +64,7 @@ $(document).ready(function () {
     $("#save-conf-btn").click(function(){
         var conf_form = new FormData($('#config-data-form')[0]);
         conf_form.append("len",$("#df_len")[0].value);
-        conf_form.append("random",$("#random")[0].value);
+        conf_form.append("random",$("#random")[0].checked);
         columns.forEach(column => {
             var iid = "#" + column
             if ($(iid).length){

@@ -2,9 +2,12 @@
 from flask import Flask, render_template, request, jsonify, send_file, Response, abort
 import json
 import pandas as pd
+import numpy as np
 from io import StringIO, BytesIO
 from base64 import b64encode
 import matplotlib
+import os
+import pickle
 # Modules
 from DataMining.tools.data_table_parser import CSV_reader
 from DataMining.tools.apyori_parser import rules_to_html
@@ -13,7 +16,9 @@ from DataMining.tools.data_obj import Data
 from DataMining.tools.table_html import TableHTML
 from DataMining.algorithms.distance import Distance
 from DataMining.algorithms.clustering import Clustering
-
+from DataMining.algorithms.linear_reg import LinearReg
+from DataMining.algorithms.logistic_reg import LogisticReg
+from DataMining.tools.html_tools import HTML_tools
 # Configurations
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
@@ -175,8 +180,8 @@ def calc_distance():
     return jsonify(response)
 
 
-@app.route("/get_log_regression_vars", methods=["GET"])
-def get_log_regression_vars():
+@app.route("/get_regression_vars", methods=["GET"])
+def get_regression_vars():
     global data_config
     response = {}
     if "DATA" in data_config:
@@ -187,7 +192,7 @@ def get_log_regression_vars():
     return jsonify(response)
 
 
-def parse_response_regression(form):
+def parse_form_regression(form):
     data = {}
     columns = data_config["DATA"].get_current_columns().copy()
     data["train_percent"] = int(form.get("train-percent",0))
@@ -209,11 +214,45 @@ def logistic_regression():
     global data_config
     response = {}
     if request.form and "DATA" in data_config:
-        data = parse_response_regression(request.form)
+        data = parse_form_regression(request.form)
+        regression = LogisticReg(data_config["DATA"].df, data["input_columns"],data["output_column"], data["train_percent"])
+        response.update(regression.fit_model(html=True))
+        data_config["MODEL"] = regression
     else:
         raise Warning("No existe un archivo a analizar")
     return jsonify(response)
 
+@app.route("/linear_regression", methods=["POST"])
+def linear_regression():
+    global data_config
+    response = {}
+    if request.form and "DATA" in data_config:
+        data = parse_form_regression(request.form)
+        regression = LinearReg(data_config["DATA"].df, data["input_columns"],data["output_column"])
+        response.update(regression.fit_model(html=True))
+        response["colum-sel"] = regression.get_columns_html(table_id="table-x-reg")
+        response["options"] = regression.get_options_html()
+        data_config["MODEL"] = regression
+    else:
+        raise Warning("No existe un archivo a analizar")
+    return jsonify(response)
+
+@app.route("/plot_regression", methods=["POST"])
+def plot_regression():
+    global data_config
+    response = {}
+    if request.form and "DATA" in data_config:
+        form = dict(request.form)
+        y = form["output"]
+        del form["output"]
+        x_s = [column for column in form.keys()]
+        if y in x_s:
+            x_s.remove(y)
+        b64enc = data_config["MODEL"].plot([y], x_s)
+        response["image"] = get_image_b64(b64enc)
+    else:
+        raise Warning("No existe un archivo a analizar")
+    return jsonify(response)
 
 
 @app.route("/analize_data", methods=["POST"])
@@ -240,8 +279,8 @@ def save_conf():
     nrows = int(form.get("len",0))
     form.pop("len")
     shuffle = False
-    if "random" in form:
-        shuffle = True
+    if form.get("random",False):
+        shuffle = True if form.get("random") == "true" else False
         form.pop("random")
     data_config["DATA"].set_rows(nrows,n_shuffle=shuffle)
     data_config["DATA"].set_columns([k for k,v in form.items() if v == "false"])
@@ -268,6 +307,30 @@ def plot_graph():
 
 
 
+@app.route("/save_model" , methods=["POST"])
+def save_model():
+    global data_config
+    if request.form and "MODEL" in data_config:
+        data = data_config["MODEL"].get_model_data()
+        model_name = request.form["model_name"]
+        model_dir = os.path.join("models",model_name)
+        #Crea el directorio
+        try:
+            os.mkdir(model_dir)
+        except FileExistsError:
+            raise Warning("Ya existe un modelo llamado "+ model_name)
+        #Save config file
+        config_path = os.path.join(model_dir,"config.json")
+        with open(config_path, "w") as fp:
+            json.dump(data["config"] , fp) 
+        model_path = os.path.join(model_dir,"model.bin")
+        pickle.dump(data["model"], open(model_path, 'wb'))
+    else:
+        raise Warning("No existe un modelo a guardar")   
+    return jsonify({"title": "Guardado con Éxito", "content": "Se ha guardado correctamente el modelo " + model_name +" en el sistema."})
+
+
+
 @app.route("/export_table")
 def export_table():
     csv = data_config["EXPORT_FILE"]
@@ -287,15 +350,117 @@ Error Handler
 def handle_exception(e):
     """Return JSON instead of HTML for HTTP errors."""
     # start with the correct headers and status code from the error
-    response = {
-        "name": e.__class__.__name__,
-        "description": e.args[0],
-    }
-    return jsonify(response), 408
+    try:
+        response = {
+            "name": e.__class__.__name__,
+            "description": e.args[0],
+        }
+        return jsonify(response), 408
+    except:
+        return e
 
 """
 Error Handler
 """
+@app.route("/delete_model" , methods=["POST"])
+def delete_model():
+    import shutil
+    response = {}
+    model_path = "models"
+    model_name = request.form["model_name"]
+    shutil.rmtree(os.path.join(model_path,model_name), ignore_errors=True)
+    return jsonify(response)
+
+@app.route("/inference_model" , methods=["POST"])
+def inference_model():
+    response = {}
+    model = data_config["MODEL"]
+    config = data_config["MODEL_CONFIG"]
+    values = {k: [float(v)] for k,v in request.form.items()}
+    data = pd.DataFrame.from_dict(values)
+    result = model.predict(data)
+    response["result"] = get_value_from_array(result)
+    response["output_id"] = config["output"]
+    return jsonify(response)
+
+@app.route("/file_inference_model" , methods=["POST"])
+def file_inference_model():
+    response = {}
+    file_content = request.files["file"].read().decode("utf-8")
+    model = data_config["MODEL"]
+    config = data_config["MODEL_CONFIG"]
+    if len(file_content) > 0:
+        file = file_content
+        filename = request.files["file"].filename
+        data = Data(file,filename,True,True)
+        result = model.predict(data.df[config["inputs"]])
+        output_name = config["output"][0]
+        try:
+            output_df = pd.DataFrame.from_records(result,columns=["PREDICTED_"+output_name])
+        except TypeError:
+             result = result.reshape(-1,1)
+             output_df = pd.DataFrame.from_records(result,columns=["PREDICTED_"+output_name]) 
+        new_df = pd.concat([data.df, output_df], axis=1)
+        response["result"] = new_df.to_html(table_id="predict_rable_result", classes="table table-bordered").replace("dataframe","")
+        response["table_id"] = "predict_rable_result"
+    else:
+        raise Warning("No existe un archivo a analizar")
+    return jsonify(response)
+
+
+def get_value_from_array(result):
+    if isinstance(result, np.integer):
+        return int(result)
+    if not isinstance(result, np.ndarray):
+        return result
+    for element in result:
+        return get_value_from_array(element)
+    return 
+
+def get_model_data(path):
+    json_path = os.path.join(path,"config.json")
+    model_path = os.path.join(path,"model.bin")
+    with open(json_path, 'r') as config_file:
+        config = json.load(config_file)
+    with open(model_path, 'rb') as model_file:
+        model = pickle.load(model_file) 
+    return config, model
+
+
+@app.route("/change_model_inference" , methods=["POST"])
+def change_model():
+    response = {}
+    models_path = "models"
+    config, model = get_model_data(os.path.join(models_path, request.form["model_name"]))
+    inputs = config["inputs"]
+    vargroup1 = inputs[:len(inputs)//2]
+    vargroup2 = inputs[len(inputs)//2:]
+    output = config["output"]
+    to_html = HTML_tools().input_from_list
+    response["vargroup1"] = to_html(vargroup1, required=True)
+    response["vargroup2"] = to_html(vargroup2, required=True)
+    response["output"] = to_html(output, disbled=True)
+    data_config["MODEL"] = model
+    data_config["MODEL_CONFIG"] = config
+    return jsonify(response)
+
+
+@app.route("/inference")
+def inference():
+    global data_config
+    models_path = "models"
+    models = [value for value in os.listdir(models_path) if os.path.isdir(os.path.join(models_path,value))]
+    if len(models)==0:
+        return render_template("inference_not_found.html")
+    #Carga los datos del primer modelo
+    config, model = get_model_data(os.path.join(models_path, models[0]))
+    inputs = config["inputs"]
+    vargroup1 = inputs[len(inputs)//2:]
+    vargroup2 = inputs[:len(inputs)//2]
+    output = config["output"]
+    data_config["MODEL"] = model
+    data_config["MODEL_CONFIG"] = config
+    return render_template("inference.html", models=models, vargroup1=vargroup1, vargroup2=vargroup2 ,output=output)
 
 @app.route("/regression")
 def regression():

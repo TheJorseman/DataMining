@@ -1,0 +1,90 @@
+<!-- Regresion Lineal -->
+<!-- Seleccion de Variables -->
+<br>
+<div id="var-selection-linear">
+    <div class="card">
+        <div class="card-header" id="var-sel-head-linear">
+          <h5 class="mb-0">
+            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#var-sel-collaps-linear" aria-expanded="false" aria-controls="var-sel-collaps-linear">
+                Seleccion de Variables
+            </button>
+          </h5>
+        </div>
+        <div id="var-sel-collaps-linear" class="collapse" aria-labelledby="var-sel-head-linear" data-parent="#var-selection-linear">
+          <div class="card-body">
+                <strong>Variables Predictoras</strong>
+                <br>
+                <div id="input-var-lin-reg">
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-3">
+                        <strong>Variable a Pronosticar</strong>
+                        <br>
+                        <select id="output-var-lin-reg" class="form form-control" name="output-var-reg">
+                            <option value="test">VAR 1</option>
+                        </select>
+                    </div>
+                </div>
+          </div>
+        </div>
+    </div>
+</div>
+<!-- Entrenamiento -->
+<br>
+<h6>Entrenamiento</h6>
+<div>
+    <button id="train-linear-regression" type="button" class="btn btn-sm btn-primary">Entrenar Modelo</button>
+</div>
+<!-- Metricas -->
+<br>
+<div id="linear-model-data">
+</div>
+<!-- Graficas -->
+<div id="plot_regression" style="display: none;">
+    <h5>Graficar</h5>
+    <div >
+        <strong>Variables Ordenada</strong>
+        <br>
+        <div id="input-ordenada">
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-3">
+                <strong>Variable Abscisa</strong>
+                <br>
+                <select id="input-abscisa" class="form form-control" name="input-abscisa">
+                    <option value="test">VAR 1</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div>
+        <button id="plot-regression" type="button" class="btn btn-sm btn-primary">Graficar</button>
+    </div>
+    <br>
+    <div id="graph_container">
+    </div>
+</div>
+<!-- Inferencia -->
+<div id="save-linear">
+    <br>
+    <div id="save_model" style="display: none;">
+        <h5>Guardar el Modelo</h5>
+        <div class="form-group">
+            <label for="model_name_linear">Nombre del modelo</label>
+            <input type="text" class="form-control" id="model_name_linear" placeholder="Nombre del modelo">
+        </div>
+        <br>
+        <button id="save-linear-model-btn" type="button" class="btn btn-sm btn-primary">Guardar</button>
+        <br>
+        <br>
+        <div id="show_linear_inference_link" style="display: none;">
+            <a class="btn btn-primary" href="/inference">Probar Modelo</a>
+        </div>
+    </div>
+    
+</div>
+
+

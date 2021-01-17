@@ -1,0 +1,76 @@
+<!-- Regresion Logistica -->
+
+<!-- Seleccion de Variables -->
+<br>
+<div id="var-selection">
+    <div class="card">
+        <div class="card-header" id="var-sel-head">
+          <h5 class="mb-0">
+            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#var-sel-collaps" aria-expanded="false" aria-controls="var-sel-collaps">
+                Seleccion de Variables
+            </button>
+          </h5>
+        </div>
+        <div id="var-sel-collaps" class="collapse" aria-labelledby="var-sel-head" data-parent="#var-selection">
+          <div class="card-body">
+                <strong>Variables de Entrada</strong>
+                <br>
+                <div id="input-var-reg">
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-3">
+                        <strong>Variable de Salida</strong>
+                        <br>
+                        <select id="output-var-reg" class="form form-control" name="output-var-reg">
+                            <option value="test">VAR 1</option>
+                        </select>
+                    </div>
+                </div>
+          </div>
+        </div>
+    </div>
+</div>
+<!-- Seleccionar el valor de entrenamiento -->
+<br>
+<div id="train-percent">
+    <h6>Porcentaje de datos para el entrenamiento</h6>
+    <div class="slidecontainer">
+        <label for="train-percent-input">Porcentaje Entrenamiento</label>
+        <input type="text" id="train-percent-input" class="form-control" placeholder="75" disabled>
+        <input type="range" min="0" max="100" value="75" step="1" class="slider" id="train-percent-slider">
+    </div>
+    <div class="row">
+        <div class="col-3">
+            <label for="test-percent-input">Porcentaje Test</label>
+            <input type="text" id="test-percent-input" class="form-control" placeholder="25" disabled>
+        </div>
+    </div>
+</div>
+<!-- Entrenamiento -->
+<br>
+<h6>Entrenamiento</h6>
+<div>
+    <button id="train-log-regression" type="button" class="btn btn-sm btn-primary">Entrenar Modelo</button>
+</div>
+<!-- Metricas -->
+<div id="logistic-metrics">
+</div>
+<!-- Inferencia -->
+<div id="logistic_save">
+    <br>
+    <div id="save_model" style="display: none;">
+        <h5>Guardar el Modelo</h5>
+        <div class="form-group">
+            <label for="model_log_name">Nombre del modelo</label>
+            <input type="text" class="form-control" id="model_log_name" placeholder="Nombre del modelo">
+        </div>
+        <br>
+        <button id="save-log-model-btn" type="button" class="btn btn-sm btn-primary">Guardar</button>
+        <br>
+        <br>
+        <div id="show_log_inference_link" style="display: none;">
+            <a class="btn btn-primary" href="/inference">Probar Modelo</a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,108 @@
+{% extends 'base.html'%}
+
+{% block content%}
+<script rel="text/javascript" src="{{ url_for('static',filename='js/inference.js')}}"></script>
+<h2>Inferencia</h2>
+<div id="separator" style="height: 50px;">
+</div>
+<div>
+    <h5>Seleccione el modelo</h5>
+    <div class="row">
+        <div class="col-3">
+            <div class="form-group">
+                <label for="models">Seleccionar </label>
+                <select class="form-control" id="models">
+                    {% for model in models %}
+                        <option>{{model}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
+    <div id="separator" style="height: 20px;">
+    </div>
+    <h5>Ó Introduzca los valores de las siguientes variables.</h5>
+    <form id="manual-form" enctype="multipart/form-data">
+        <div id="manual-input" class="row pl-0">
+            <div id="vargroup1" class="col">
+                {% for var in vargroup1 %}
+                <div class="form-group">
+                    <label for="{{var}}">{{var}}</label>
+                    <input type="text" class="form-control" id="{{var}}" required="true">
+                </div>
+                {% endfor %}
+            </div>
+            <div id="vargroup2" class="col">
+                {% for var in vargroup2 %}
+                <div class="form-group">
+                    <label for="{{var}}">{{var}}</label>
+                    <input type="text" class="form-control" id="{{var}}" required="true">
+                </div>
+                {% endfor %}
+            </div>
+            <div class="col">
+            </div>
+        </div>
+        <div id="individual_result">
+            <div class="row">
+                <div class="col-4">
+                    <div id="manual_output">
+                        {% for var in output %}
+                        <div class="form-group">
+                            <label for="{{var}}">{{var}}</label>
+                            <input type="text" class="form-control" id="{{var}}" disabled>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <button id="inference-btn" type="submit" class="btn btn-sm btn-primary">Calcular</button>
+            <br>
+            <br>
+        </div>
+    </form>   
+
+    <div id="result">
+        <form id="file-form" method="POST" enctype="multipart/form-data">
+            <div id="file-input" class="row">
+                <div class="col-3">
+                    <h5>Seleccione un Archivo</h5>
+                    <div class="custom-file">
+                        <input name="file" id="file" type="file" class="custom-file-input" lang="es" accept=".xls,.xlsx, .csv, .txt">
+                        <label class="custom-file-label" for="file">Seleccionar Archivo</label>
+                    </div>
+                </div>
+            </div>
+            <br>
+        </form>
+        <button id="inference-file-btn" type="button" class="btn btn-sm btn-primary">Calcular con archivo</button>
+        <br>
+        <br>
+        <div id="table-output">
+        </div>
+    </div>
+    <br>
+    <button id="delete-model" type="button" class="btn btn-sm btn-danger">Eliminar Modelo</button>
+    <br>
+</div>
+
+<div class="modal hide" id="warning-modal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 id="warning_modal_title" class="modal-title">Advertencia</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p id="warning_modal_content">Esta seguro que desea borrar el modelo <span id="model_name_span"></span><span>?</span></p>
+        </div>
+        <div class="modal-footer">
+          <button id="remove_model_btn" type="button" class="btn btn-danger" data-dismiss="modal">Eliminar</button>
+        </div>
+      </div>
+    </div>
+</div>
+
+{% endblock%}

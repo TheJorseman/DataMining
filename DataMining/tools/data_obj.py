@@ -39,7 +39,7 @@ class Data(object):
     def get_current_columns(self):
         return list(self.df.columns.values)
 
-    def get_record_html(self,columns, ):
+    def get_record_html(self,columns):
         template = """
         <div class="form-check">
             <input type="checkbox" id="{r_id}" class="form-check-input" name="{r_name}" value="{r_value}" checked>
@@ -54,7 +54,7 @@ class Data(object):
         if self.table:
             self.df = self.df.drop(columns,axis=1)
 
-    def set_rows(self,n_rows,n_shuffle=False):
+    def set_rows(self,n_rows, n_shuffle=False):
         self.df = self.df.head(n_rows)
         if n_shuffle:
             self.df = shuffle(self.df)

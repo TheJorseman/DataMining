@@ -52,7 +52,10 @@
                             <a href="/clustering">Clustering</a>
                         </li>
                         <li>
-                            <a href="/regression">Regresión Logística</a>
+                            <a href="/regression">Regresión</a>
+                        </li>
+                        <li>
+                            <a href="/inference">Inferencia</a>
                         </li>
                     </ul>
                 </li>
@@ -62,29 +65,24 @@
         </nav>
         <!-- Page Content  -->
         <div id="content" style="background-color: #F5F5F6;">
-
             <button id="button-toggle-sidebar" type="button" class="btn btn-primary-custom">
                 <i class="fas fa-bars" style="color: aliceblue;"></i>
             </button>
-
             <br>
             {% include 'modal.html' %} 
-
             <div id="js-loader" style="display: none;">
                 <div class="block_page"></div>
                 <div class="loader"></div>
             </div>
-            
             {% block content%}
-
             {% endblock%}
-            <div name="separator" style="height: 300px;">
+            <div id="separator" style="height: 300px; background-color: rgba(0, 0, 0, 0);">
             </div>
         </div>
     </div>
 </body>
 <div class="footer" style="background-color:#25476D;">
-    <div class="footer-copyright text-center py-3" style="color: aliceblue;">© 2020 Copyright:
+    <div class="footer-copyright text-center py-3" style="color: aliceblue;">© 2021 Copyright:
     <a href="https://thejorseman.com/" style="color: aliceblue;"> TheJorseman.com</a>
     </div>
 </div>
