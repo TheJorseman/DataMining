@@ -1,9 +1,9 @@
-from sklearn import linear_model
-from sklearn.linear_model import LogisticRegression
 from sklearn import model_selection
+from sklearn.svm import SVC 
 from sklearn.metrics import classification_report
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import accuracy_score
+
 from pandas import DataFrame, crosstab, read_table
 import numpy as np  
 import matplotlib.pyplot as plt
@@ -14,27 +14,37 @@ from base64 import b64encode
 from DataMining.tools.table_html import TableHTML
 from DataMining.tools.html_tools import HTML_tools
 
-class LogisticReg(object):
-    def __init__(self, df, input_vars, output_var, train_size):
+
+class SVM(object):
+    def __init__(self, df, input_vars, output_var, train_size, kernel):
         super().__init__()
         self.df = df
         self.input_vars = input_vars
         self.output_var = output_var
         self.train_size = train_size
         self.ndigits = 4
-        self.model = LogisticRegression(solver='lbfgs', max_iter=10000)
+        self.model = SVC(kernel=kernel)
         self.replaced = {}
         self.clean_data()
 
     def clean_data(self):
         columns = self.output_var + self.input_vars
+        # Se convierte la variable de salida a la establecida -1,1
+        values_output = self.df[self.output_var[0]].unique()
+        if len(values_output)>2:
+            raise Warning("El sistema solo puede clasificar dos clases, cambie los datos o cambie la variable de salida.")
+        new_vals = tuple(zip(values_output,[-1,1]))
+        dict_vals = {value[0]:value[1]  for value in new_vals}
+        self.replaced.update(dict_vals)
+        self.df = self.df.replace(dict_vals)
+        ##########################################################
         for column in columns:
             if self.df[column].dtypes == "O":
                 values = self.df[column].unique()
                 new_vals = tuple(zip(values,range(len(values))))
                 dict_vals = {value[0]:value[1]  for value in new_vals}
-                self.df = self.df.replace(dict_vals)
                 self.replaced.update(dict_vals)
+                self.df = self.df.replace(dict_vals)
         
 
     def prepare_data(self):
@@ -70,7 +80,6 @@ class LogisticReg(object):
             result += text.format(old,new)
         return result
 
-
     def response_html(self, confusion_matrix, score, report, intercept, coef):
         response = {}
         header = "<h6>{}</h6>"
@@ -82,12 +91,6 @@ class LogisticReg(object):
         confusion_df = self.parse_confussion_matrix(confusion_matrix)
         response["confusion"] = header.format("Matriz de Clasificación") + table_sm.format(confusion_df.to_html(classes="table table-bordered table-sm", index=False)).replace("dataframe","")
         response["score"] = text.format("Score",score)
-        model_values = {self.input_vars[i] : coef[0][i] for i in range(len(coef[0]))}
-        model = text.format("Modelo: ","") 
-        model += text.format("a+bX","=")
-        model += text.format("",intercept[0])
-        model += " ".join([text_inv.format( ("+" if v>0 else "") + str(v),k) for k,v in model_values.items()])
-        response["model"] = model
         response["changed_vals"] = self.replaced_html()
         response["html-join"] = "<br>".join(v for v in response.values())
         response["intercept"] = intercept[0].tolist()

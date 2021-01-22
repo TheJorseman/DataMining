@@ -1,27 +1,38 @@
-# DataMiningAlgorithms
+# Mulatos Mining Tools
 
-DataMining es una herramienta web para la aplicacion de algoritmos de mineria de datos.
+Mulatos Mining Tools es una herramienta web para la aplicación de algoritmos de minería de datos.
 
-## Installation
+## Algoritmos Implementados
+* APriori
+* Correlación de Pearson
+* Métricas
+* Clustering Particional
+* Clustering Jerarquico
+* Regresion Lineal
+* Regresion Logística
 
+## Instalación
 Use el gestor de paquetes [pip](https://pip.pypa.io/en/stable/) para instalar los requerimientos.
 
 ```bash
 pip install -r requirements.txt
 ```
+O use el gestor de ambientes [anaconda](https://www.anaconda.com/) para instalar los requerimientos.
 
-## Usage
+```bash
+conda env create --name MineriaDatos --file=MineriaDatos.yml
+```
+Activar el enviroment
+
+```bash
+conda activate MineriaDatos
+```
+
+## Uso
 
 ```python
 python3 main.py
 ```
-## Algorithms
-* Priori
 
-## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-Please make sure to update tests as appropriate.
-
-## License
+## Licencia
 [GNU AGPLv3](https://choosealicense.com/licenses/agpl-3.0/)

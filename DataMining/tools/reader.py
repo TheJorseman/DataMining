@@ -18,7 +18,6 @@ class Reader(object):
         else:
             raise Warning("Solo se admiten las extensiones " + ",".join(self.extensions))
 
-
     def get_head(self):
         return self.df.head()
     

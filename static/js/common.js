@@ -30,7 +30,6 @@ $(document).ready(function () {
                     form_data.append(this.id,this.checked)
                 }
             });
-
         };
         $.ajax({
             url: '/set_current_columns',

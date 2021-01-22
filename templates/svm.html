@@ -1,0 +1,125 @@
+{% extends 'algorithm_base.html'%}
+
+{% block description%}  
+<h2>Maquinas de Soporte Vectorial</h2>
+<div id="accordion">
+    <div class="card">
+      <div class="card-header" id="var-ser-h">
+        <h5 class="mb-0">
+          <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#var-collapse" aria-expanded="false" aria-controls="var-collapse">
+            Descripción
+          </button>
+        </h5>
+      </div>
+  
+      <div id="var-collapse" class="collapse" aria-labelledby="var-ser-h" data-parent="#accordion">
+        <div class="card-body">
+            <div>
+                Intuitivamente, una SVM es un modelo que representa los puntos en el espacio, separando las clases en dos (espacios) mediante un hiperplano.
+                Se busca la separación máxima posible entre los puntos más cercanos a cada clase (vectores de soporte). 
+                Hoy en día, SVM constituye un referente en el aprendizaje automático, sobre todo para encontrar la manera óptima de resolver problemas de clasificación.
+            </div>            
+        </div>
+      </div>
+    </div>
+</div>
+{% endblock%}
+
+{% block algorithm%}
+<script rel="text/javascript" src="{{ url_for('static',filename='js/svm.js')}}"></script>
+<script rel="text/javascript" src="{{ url_for('static',filename='js/save_model.js')}}"></script>
+<div id="reg-alg">
+    <!-- SVM -->
+    <!-- Seleccion de Variables -->
+    <br>
+    <div id="var-selection">
+        <div class="card">
+            <div class="card-header" id="var-sel-head">
+            <h5 class="mb-0">
+                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#var-sel-collaps" aria-expanded="false" aria-controls="var-sel-collaps">
+                    Seleccion de Variables
+                </button>
+            </h5>
+            </div>
+            <div id="var-sel-collaps" class="collapse" aria-labelledby="var-sel-head" data-parent="#var-selection">
+            <div class="card-body">
+                    <strong>Variables de Entrada</strong>
+                    <br>
+                    <div id="input-var-reg">
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-3">
+                            <strong>Variable de Salida</strong>
+                            <br>
+                            <select id="output-var-reg" class="form form-control" name="output-var-reg">
+                                <option value="test">VAR 1</option>
+                            </select>
+                        </div>
+                    </div>
+            </div>
+            </div>
+        </div>
+    </div>
+    <!-- Seleccionar el valor de entrenamiento -->
+    <br>
+    <div id="train-percent">
+        <h6>Porcentaje de datos para el entrenamiento</h6>
+        <div class="slidecontainer">
+            <label for="train-percent-input">Porcentaje Entrenamiento</label>
+            <input type="text" id="train-percent-input" class="form-control" placeholder="75" disabled>
+            <input type="range" min="0" max="100" value="75" step="1" class="slider" id="train-percent-slider">
+        </div>
+        <div class="row">
+            <div class="col-3">
+                <label for="test-percent-input">Porcentaje Test</label>
+                <input type="text" id="test-percent-input" class="form-control" placeholder="25" disabled>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div id="kernel-div">
+        <div class="row">
+            <div class="col-3">
+                <strong>Kernel a usar</strong>
+                <br>
+                <select id="kernel" class="form form-control" name="kernel">
+                    <option value="linear">Lineal</option>
+                    <option value="rbf">RBF</option>
+                    <option value="sigmoid">Sigmoide</option>
+                    <option value="poly">Polinomial</option>
+                </select>
+            </div>
+        </div>      
+    </div>
+    <!-- Entrenamiento -->
+    <br>
+    <h6>Entrenamiento</h6>
+    <div>
+        <button id="train-svm" type="button" class="btn btn-sm btn-primary">Entrenar Modelo</button>
+    </div>
+    <br>
+    <!-- Metricas -->
+    <div id="svm-metrics">
+    </div>
+    <!-- Inferencia -->
+    <div id="svm_save">
+        <br>
+        <div id="save_model" style="display: none;">
+            <h5>Guardar el Modelo</h5>
+            <div class="form-group">
+                <label for="model_log_name">Nombre del modelo</label>
+                <input type="text" class="form-control" id="model_log_name" placeholder="Nombre del modelo">
+            </div>
+            <br>
+            <button id="save-log-model-btn" type="button" class="btn btn-sm btn-primary">Guardar</button>
+            <br>
+            <br>
+            <div id="show_log_inference_link" style="display: none;">
+                <a class="btn btn-primary" href="/inference">Probar Modelo</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock%}

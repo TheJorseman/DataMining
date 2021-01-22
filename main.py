@@ -18,6 +18,7 @@ from DataMining.algorithms.distance import Distance
 from DataMining.algorithms.clustering import Clustering
 from DataMining.algorithms.linear_reg import LinearReg
 from DataMining.algorithms.logistic_reg import LogisticReg
+from DataMining.algorithms.svm import SVM
 from DataMining.tools.html_tools import HTML_tools
 # Configurations
 matplotlib.use('Agg')
@@ -305,6 +306,19 @@ def plot_graph():
     plt.close()
     return jsonify(response)
 
+@app.route("/train_svm", methods=["POST"])
+def train_svm():
+    global data_config
+    response = {}
+    if request.form and "DATA" in data_config:
+        data = parse_form_regression(request.form)
+        svm = SVM(data_config["DATA"].df, data["input_columns"],data["output_column"], data["train_percent"], request.form.get("kernel"))
+        response.update(svm.fit_model(html=True))
+        data_config["MODEL"] = svm
+    else:
+        raise Warning("No existe un archivo a analizar")
+    return jsonify(response)
+
 
 
 @app.route("/save_model" , methods=["POST"])
@@ -460,7 +474,12 @@ def inference():
     output = config["output"]
     data_config["MODEL"] = model
     data_config["MODEL_CONFIG"] = config
+    replaced_html = config.get("replaced_html","")
     return render_template("inference.html", models=models, vargroup1=vargroup1, vargroup2=vargroup2 ,output=output)
+
+@app.route("/svm")
+def svm():
+    return render_template("svm.html")
 
 @app.route("/regression")
 def regression():
