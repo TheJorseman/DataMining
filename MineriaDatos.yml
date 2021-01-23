@@ -63,5 +63,4 @@ dependencies:
     - werkzeug==1.0.1
     - xlrd==1.2.0
     - xlsxwriter==1.3.7
-prefix: C:\Users\migue\Anaconda3\envs\MineriaDatos
 
