@@ -19,7 +19,9 @@ $(document).ready(function () {
             contentType: false,
             processData: false,
             success: function(response){
+                console.log(response["scatter_plot"]);
                 $("#clustering_container").html(response["clustering_summary"]);
+                $("#clustering_plot").html( "<h5>Gráfica de los clusters</h5>" + response["scatter_plot"]);
                 $("#export").css("display","block");
                 //clustering_table
                 $('#clustering_table').DataTable();
