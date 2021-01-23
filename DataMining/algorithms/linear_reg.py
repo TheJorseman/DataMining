@@ -29,7 +29,7 @@ class LinearReg(object):
         model_data["coeficients"] = self.model.coef_
         model_data["intercept"] = self.model.intercept_
         model_data["residual_error"] = round(max_error(Y_train, Y_pronostico),self.ndigits)
-        model_data["r2_score"] = round(r2_score(Y_train, Y_pronostico))
+        model_data["r2_score"] = round(r2_score(Y_train, Y_pronostico),self.ndigits)
         if html:
             model_data["model_str"] = self.get_string_model_html(self.model.coef_[0], self.model.intercept_, model_data["residual_error"])
             return self.get_readable_model_data_html(model_data)

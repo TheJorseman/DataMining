@@ -108,3 +108,15 @@ class Clustering(object):
         file = StringIO()
         self.cluster_df.round(self.decimal_round).to_csv(file)
         return file.getvalue()
+
+    def get_scatter_plot(self):
+        cluster = "clusterH"
+        columns = list(self.df.columns.values)
+        columns.remove(cluster)
+        values = self.df[columns].values
+        labels = self.df[cluster].values
+        figure = plt.figure(figsize=(10, 7))
+        plt.scatter(values[:,0], values[:,1], c=labels, cmap='rainbow')
+        plt.grid()
+        plt.title("Gráfica de clusters")
+        return figure

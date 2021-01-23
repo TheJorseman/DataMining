@@ -102,7 +102,8 @@ class SVM(object):
         matrix = confusion_matrix.to_numpy()
         columns = [" "] + ["Pred "+str(val) for val in confusion_matrix.columns.values]
         data = []
-        for i in range(len(matrix)):
+        values = [-1,1]
+        for i in values:
             data.append( ["VReal " + str(i)] + matrix[i].tolist())
         return DataFrame(data=data, columns=columns)
 
