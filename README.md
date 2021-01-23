@@ -1,15 +1,16 @@
-# Mulatos Mining Tools
+# The Jorseman Mining Tool
 
-Mulatos Mining Tools es una herramienta web para la aplicación de algoritmos de minería de datos.
+The Jorseman Mining Tool es una herramienta web para la aplicación de algoritmos de minería de datos.
 
 ## Algoritmos Implementados
-* APriori
+* Apriori
 * Correlación de Pearson
 * Métricas
 * Clustering Particional
 * Clustering Jerarquico
 * Regresion Lineal
 * Regresion Logística
+* Máquina de Soporte Vectorial
 
 ## Instalación
 Use el gestor de paquetes [pip](https://pip.pypa.io/en/stable/) para instalar los requerimientos.
