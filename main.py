@@ -164,6 +164,7 @@ def clustering_process():
         cluster = load_clustering(request.form["method"])
         clusters_df = cluster.get_clusters(int(request.form["n_clusters"]))
         response["clustering_summary"] = clusters_df.to_html(index=False,table_id='clustering_table').replace("dataframe","table table-bordered")
+        response["scatter_plot"] = get_html_by_figure(cluster.get_scatter_plot())
         set_export_data(cluster.get_export_file(),"clusters.csv")
     return jsonify(response)
 
@@ -393,7 +394,9 @@ def inference_model():
     values = {k: [float(v)] for k,v in request.form.items()}
     data = pd.DataFrame.from_dict(values)
     result = model.predict(data)
-    response["result"] = get_value_from_array(result)
+    result = get_value_from_array(result)
+    dict_inverse = {v:k for k,v in config["replaced"].items()}
+    response["result"] = dict_inverse[result]
     response["output_id"] = config["output"]
     return jsonify(response)
 
@@ -416,7 +419,9 @@ def file_inference_model():
              output_df = pd.DataFrame.from_records(result,columns=["PREDICTED_"+output_name]) 
         new_df = pd.concat([data.df, output_df], axis=1)
         response["result"] = new_df.to_html(table_id="predict_rable_result", classes="table table-bordered").replace("dataframe","")
+        set_export_data(new_df.to_csv(),"inference.csv")
         response["table_id"] = "predict_rable_result"
+
     else:
         raise Warning("No existe un archivo a analizar")
     return jsonify(response)
@@ -510,7 +515,7 @@ def index():
     return render_template("index.html")
 
 
-app.run(debug=True,port=8000)
+app.run(debug=True,port=80)
 
 
 #data = CSV_reader('apriori.csv',bool)
