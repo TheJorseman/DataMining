@@ -90,6 +90,7 @@ $(document).ready(function () {
             success: function(response){
                 $("#table-output").html(response["result"]);
                 $('#' + response["table_id"]).DataTable();
+                $("#export").css("display","block");
             },
             error: function(error){
                 set_modal(error);
