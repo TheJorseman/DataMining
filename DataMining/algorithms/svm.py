@@ -22,6 +22,7 @@ class SVM(object):
         self.input_vars = input_vars
         self.output_var = output_var
         self.train_size = train_size
+        self.kernel = kernel
         self.ndigits = 4
         self.model = SVC(kernel=kernel)
         self.replaced = {}
@@ -60,9 +61,10 @@ class SVM(object):
         score = self.model.score(self.X_validation, self.Y_validation)
         report = classification_report(self.Y_validation, PrediccionesNuevas)
         print(report)
+        coef = False
         if html:
-            return self.response_html(confusion_matrix, score, report, self.model.intercept_, self.model.coef_)
-        return self.response_dict(confusion_matrix, score, report, self.model.intercept_, self.model.coef_)
+            return self.response_html(confusion_matrix, score, report, self.model.intercept_, coef)
+        return self.response_dict(confusion_matrix, score, report, self.model.intercept_, coef)
         
     def response_dict(self, confusion_matrix, score, report, intercept, coef):
         response = {}
@@ -70,7 +72,7 @@ class SVM(object):
         response["score"] = score
         response["report"] = report
         response["intercept"] = intercept.tolist()
-        response["coef"] = coef.tolist()
+        response["coef"] = coef.tolist() if coef else ""
         return response
 
     def replaced_html(self):
@@ -94,7 +96,7 @@ class SVM(object):
         response["changed_vals"] = self.replaced_html()
         response["html-join"] = "<br>".join(v for v in response.values())
         response["intercept"] = intercept[0].tolist()
-        response["coef"] = coef[0].tolist()
+        response["coef"] = coef[0].tolist() if coef else ""
         return response
 
 

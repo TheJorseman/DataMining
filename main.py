@@ -395,8 +395,11 @@ def inference_model():
     data = pd.DataFrame.from_dict(values)
     result = model.predict(data)
     result = get_value_from_array(result)
-    dict_inverse = {v:k for k,v in config["replaced"].items()}
-    response["result"] = dict_inverse[result]
+    if "replaced" in config:
+        dict_inverse = {v:k for k,v in config["replaced"].items()}
+        response["result"] = dict_inverse[result]
+    else:
+        response["result"] = result
     response["output_id"] = config["output"]
     return jsonify(response)
 
