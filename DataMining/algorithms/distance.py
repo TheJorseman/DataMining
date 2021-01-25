@@ -1,5 +1,5 @@
 from scipy.spatial import distance
-from numpy import ones
+from numpy import ones,zeros
 from pandas import DataFrame
 from io import StringIO
 
@@ -29,7 +29,7 @@ class Distance(object):
     def calculate_distance_matrix(self):
         shape = self.df.shape
         n_rows = shape[0]
-        matrix = ones((n_rows, n_rows))
+        matrix = zeros((n_rows, n_rows))
         for row in range(n_rows - 1):
             for column in range(row + 1, n_rows):
                 matrix[row][column] = self.calculate_distance(self.df.iloc[row].to_numpy(),self.df.iloc[column].to_numpy())
