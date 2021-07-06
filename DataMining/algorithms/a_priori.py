@@ -1,6 +1,6 @@
 from numpy import zeros, array, delete
 from itertools import combinations
-from numba import jit
+#from numba import jit
 import time 
 from DataMining.tools.data_table_parser import CSV_reader
 
@@ -79,7 +79,7 @@ class Apriori(object):
 
 
 
-@jit(nopython=True, parallel=True)
+#@jit(nopython=True, parallel=True)
 def get_items_supp(items,matrix):
     supp_vector = zeros(len(items))
     item_len = len(items[0])
