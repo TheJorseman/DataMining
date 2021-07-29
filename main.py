@@ -518,7 +518,7 @@ def index():
     return render_template("index.html")
 
 
-app.run(host="0.0.0.0", debug=False,port=80)
+app.run(host="0.0.0.0", debug=False,port=8080)
 
 
 #data = CSV_reader('apriori.csv',bool)
