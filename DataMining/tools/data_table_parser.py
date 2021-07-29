@@ -1,6 +1,6 @@
 from pandas import read_csv
 from collections import Counter
-from numba import jit
+#from numba import jit
 #import numpy as np
 class CSV_reader(object):
 
